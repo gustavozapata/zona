@@ -1,2 +1,2 @@
 # zona
-Red social super personalizada
+Red social súper personalizada
