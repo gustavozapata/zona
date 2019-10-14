@@ -1,22 +1,53 @@
+:root {
+  --red: #fc766aff;
+  --blue: #5b84b1ff;
+  --blue-dark: #0a2a39;
+  --blue-light: #1acbfb;
+}
+
 .App {
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
+.Header {
+  width: 100%;
+  padding: 1px;
+  text-align: center;
+  background-color: var(--blue-dark);
 }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+.Header h1 {
   color: white;
+  margin-left: 20%;
+  font-weight: 900;
+  font-size: 2em;
 }
 
-.App-link {
-  color: #09d3ac;
+.SideBar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 20%;
+  height: 100vh;
+  background-color: #FBFBFB;
+}
+.SideBar div {
+  width: 70%;
+  margin: 50px auto;
+}
+.SideBar ul {
+  padding: 0;
+  text-align: left;
+  width: 80%;
+}
+.SideBar ul li {
+  list-style: none;
+  margin: 20px;
+}
+
+.Content {
+  margin-left: 20%;
+  margin-top: 60px;
+}
+.Content .post {
+  margin-top: 80px;
 }
