@@ -7,17 +7,23 @@ export class Content extends Component {
             {
                 id: 1,
                 title: 'Silicon Valley',
-                image: 'sv.jpeg'
+                image: 'sv.jpeg',
+                by: 'gustavozapata',
+                date: 'Aug 12th'
             },
             {
                 id: 2,
                 title: 'Intel San Jose, CA',
-                image: 'sj.jpeg'
+                image: 'sj.jpeg',
+                by: 'gustavozapata',
+                date: 'Sep 24th'
             },
             {
                 id: 3,
                 title: 'iPhone 11 Pro',
-                image: 'iphone.jpeg'
+                image: 'iphone.jpeg',
+                by: 'gustavozapata',
+                date: 'Oct 2nd'
             }
         ]
     }
@@ -26,11 +32,14 @@ export class Content extends Component {
         return (
             <div className="Content">
                 {this.state.posts.map(post => (
-                    <div className="post">
+                    <div className="post" key={post.id}>
                         <h3>{post.title}</h3>
+                        <div className='profile-pic'>
+                            <img src={require(`../images/${post.by}.png`)} alt={post.by} />
+                            <p>{post.date}</p>
+                        </div>
                         <img src={require(`../images/${post.image}`)} alt={post.title} /><br />
-                        <button>Like</button>
-                        <button>Comment</button>
+                        <button className='check'></button>
                     </div>
                 ))}
             </div>

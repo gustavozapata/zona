@@ -1,8 +1,5 @@
 :root {
-  --red: #fc766aff;
-  --blue: #5b84b1ff;
   --blue-dark: #0a2a39;
-  --blue-light: #1acbfb;
 }
 
 .App {
@@ -11,15 +8,15 @@
 
 .Header {
   width: 100%;
-  padding: 1px;
+  padding: 10px 0;
   text-align: center;
   background-color: var(--blue-dark);
 }
 .Header h1 {
   color: white;
   margin-left: 20%;
-  font-weight: 900;
-  font-size: 2em;
+  font-weight: 300;
+  font-size: 1.4em;
 }
 
 .SideBar {
@@ -28,6 +25,7 @@
   left: 0;
   width: 20%;
   height: 100vh;
+  border-right: 1px solid #E8E8E8;
   background-color: #FBFBFB;
 }
 .SideBar div {
@@ -37,11 +35,25 @@
 .SideBar ul {
   padding: 0;
   text-align: left;
-  width: 80%;
+  width: 100%;
+}
+.SideBar ul img {
+  width: 20px;
+  margin-right: 10px;
+  vertical-align: middle;
 }
 .SideBar ul li {
   list-style: none;
-  margin: 20px;
+  margin: 30px 10px;
+  font-weight: 500;
+  color: #5F5F5F;
+  cursor: pointer;
+}
+.SideBar .active {
+  color: #3F3F3F;
+}
+.SideBar ul li:hover {
+  color: #3F3F3F;
 }
 
 .Content {
@@ -50,4 +62,43 @@
 }
 .Content .post {
   margin-top: 80px;
+  position: relative;
+}
+.Content .check {
+  background-image: url('./images/icons/check.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  border: none;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+.post h3 {
+  margin-bottom: 30px;
+}
+.profile-pic {
+  position: absolute;
+  top: -15px;
+  left: 130px;
+}
+.profile-pic p {
+  display: inline;
+  margin-left: 5px;
+  color: #5F5F5F;
+  font-weight: 500;
+  font-size: .8em;
+}
+.profile-pic img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 2px solid rgb(203, 203, 203);
+  vertical-align: middle;
+}
+
+.Footer {
+  margin: 50px auto;
+  margin-left: 20%;
+  text-align: center
 }
