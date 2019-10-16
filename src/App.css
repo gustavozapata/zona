@@ -48,6 +48,7 @@
   font-weight: 500;
   color: #5F5F5F;
   cursor: pointer;
+  font-size: .85em;
 }
 .SideBar .active {
   color: #3F3F3F;
@@ -61,8 +62,9 @@
   margin-top: 60px;
 }
 .Content .post {
-  margin-top: 80px;
+  margin: 80px auto 30px auto;
   position: relative;
+  width: 600px;
 }
 .Content .check {
   background-image: url('./images/icons/check.png');
@@ -80,7 +82,7 @@
 .profile-pic {
   position: absolute;
   top: -15px;
-  left: 130px;
+  left: 0px;
 }
 .profile-pic p {
   display: inline;

@@ -1,4 +1,8 @@
 import React, { Component } from 'react'
+// import { menuItems } from '../content/sideBarContent'
+import { menuItems } from '../content/spanish/sideBarContent'
+
+const { HOME, GROUPS, SETTINGS } = menuItems;
 
 export class SideBar extends Component {
 
@@ -6,49 +10,41 @@ export class SideBar extends Component {
         navLinks: [
             {
                 id: 1,
-                name: "Home",
-                icon: "home_g.png",
+                name: 'home',
+                label: HOME,
+                image: "home_g.png",
                 active: true
             },
             {
                 id: 2,
-                name: "Groups",
-                icon: "groups_g.png",
+                name: 'groups',
+                label: GROUPS,
+                image: "groups_g.png",
                 active: false
             },
             {
                 id: 3,
-                name: "Settings",
-                icon: "settings_g.png",
+                name: 'settings',
+                label: SETTINGS,
+                image: "settings_g.png",
                 active: false
             }
         ]
     }
 
-    hoverImage = (id) => {
-        let arr = this.state.navLinks
-        for (let i = 0; i < arr.length; i++) {
-            if (arr[i].id === id) {
-                arr[i].icon = arr[i].name.toLowerCase() + '.png'
-            }
-        }
-        this.updateState(arr)
-    }
-
-    leaveImage = (id) => {
-        let arr = this.state.navLinks
-        for (let i = 0; i < arr.length; i++) {
-            if (arr[i].id === id) {
-                arr[i].icon = arr[i].name.toLowerCase() + '_g.png'
-            }
-        }
-        this.updateState(arr)
-    }
-
-    updateState = (arr) => {
-        this.setState({
-            navLinks: arr
-        })
+    hoverImage = (id, letter = '') => {
+        this.setState(state => {
+            const list = state.navLinks.map((item, index) => {
+                if (index === id) {
+                    return item.image = item.name + `${letter}.png`
+                } else {
+                    return item
+                }
+            });
+            return {
+                list
+            };
+        });
     }
 
     render() {
@@ -56,16 +52,16 @@ export class SideBar extends Component {
             <div className="SideBar">
                 <div>
                     <ul>
-                        {this.state.navLinks.map(nav => (
+                        {this.state.navLinks.map((nav, index) => (
                             <li
                                 key={nav.id}
                                 className={nav.active ? 'active' : null}
-                                onMouseOver={() => this.hoverImage(nav.id)}
-                                onMouseOut={() => this.leaveImage(nav.id)} >
+                                onMouseOver={() => this.hoverImage(index)}
+                                onMouseOut={() => this.hoverImage(index, '_g')} >
                                 <img
-                                    src={require(`../images/icons/${nav.active ? nav.name.toLowerCase() + '.png' : nav.icon}`)}
+                                    src={require(`../images/icons/${nav.active ? nav.name + '.png' : nav.image}`)}
                                     alt={nav.name} />
-                                {nav.name}
+                                {nav.label}
                             </li>
                         ))}
                     </ul>
