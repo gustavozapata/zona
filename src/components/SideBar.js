@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-// import { menuItems } from '../content/sideBarContent'
-import { menuItems } from '../content/spanish/sideBarContent'
+import { menuItems } from '../content/sideBarContent'
+// import { menuItems } from '../content/spanish/sideBarContent'
 
 const { HOME, GROUPS, SETTINGS } = menuItems;
 
@@ -50,7 +50,7 @@ export class SideBar extends Component {
     render() {
         return (
             <div className="SideBar">
-                <div>
+                <div className='menu'>
                     <ul>
                         {this.state.navLinks.map((nav, index) => (
                             <li
@@ -65,6 +65,10 @@ export class SideBar extends Component {
                             </li>
                         ))}
                     </ul>
+                </div>
+                <div className='languages'>
+                    <p className='active-language'>English</p>
+                    <p>Spanish</p>
                 </div>
             </div>
         )

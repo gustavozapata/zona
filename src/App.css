@@ -6,19 +6,87 @@
   text-align: center;
 }
 
+/* HEADER */
 .Header {
   width: 100%;
   padding: 10px 0;
   text-align: center;
-  background-color: var(--blue-dark);
+  /* background-color: var(--blue-dark); */
+}
+.Header header {
+  margin-left: 20%;
 }
 .Header h1 {
-  color: white;
-  margin-left: 20%;
-  font-weight: 300;
-  font-size: 1.4em;
+  display: inline-block;
+  font-weight: 500;
+  font-size: 2em;
+  border: 1px solid rgb(43, 43, 43);
+  border-radius: 5px;
+  padding: 5px 20px;
+  border-top-left-radius: 25px;
+  border-left: 2px solid rgb(43,43,43);
+  border-top: 2px solid rgb(43,43,43);
 }
 
+/* BUTTON */
+.Button {
+  /* position: relative; */
+}
+.Button button {
+  position: absolute;
+  top: 30px;
+  left: 25%;
+  box-sizing: border-box;
+  margin: 5px;
+  padding: 10px 18px;
+  color: #4e4e4e;
+  font-size: .9em;
+  background-color: #fff;
+  border: 1px solid #bcbcbc;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.5s;
+  outline: none;
+}
+.Button button:hover {
+  background-color: #ebebeb
+}
+.btn-menu {
+  display: none;
+  position: absolute;
+  box-sizing: border-box;
+  background-color: white;
+  top: 80px;
+  left: 25.2%;
+  width: 140px;
+  border: 1px solid #bcbcbc;
+  border-radius: 4px;
+  padding: 5px 0;
+  text-align: left;
+  box-shadow: 0 2px 6px 0 rgba(0,0,0,.1);
+}
+.btn-menu ul {
+  padding: 0;
+  margin: 0;
+}
+.btn-menu ul li {
+  list-style: none;
+  margin: 5px 0 5px 0px;
+  padding: 6px;
+  font-size: .85em;
+  cursor: pointer;
+  color: #4e4e4e;
+}
+.btn-menu ul li:hover {
+  background-color: #E8E8E8;
+}
+.btn-menu ul li img {
+  width: 15px;
+  vertical-align: middle;
+  margin: 5px;
+}
+
+/* SIDEBAR */
 .SideBar {
   position: fixed;
   top: 0;
@@ -28,7 +96,7 @@
   border-right: 1px solid #E8E8E8;
   background-color: #FBFBFB;
 }
-.SideBar div {
+.SideBar .menu {
   width: 70%;
   margin: 50px auto;
 }
@@ -56,7 +124,27 @@
 .SideBar ul li:hover {
   color: #3F3F3F;
 }
+.languages {
+  position: absolute;
+  bottom: 20px;
+  left: 60px;
+}
+.languages p {
+  display: inline;
+  margin: 10px;
+  font-size: .75em;
+  cursor: pointer;
+}
+.languages p:hover {
+  text-decoration: underline;
+}
+.active-language {
+  color: rgb(32, 112, 250);
+  font-weight: 500;
+  text-decoration: underline;
+}
 
+/* CONTENT */
 .Content {
   margin-left: 20%;
   margin-top: 60px;
@@ -99,6 +187,7 @@
   vertical-align: middle;
 }
 
+/* PROFILE */
 .Footer {
   margin: 50px auto;
   margin-left: 20%;
