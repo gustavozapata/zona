@@ -94,8 +94,7 @@
   width: 20%;
   height: 100vh;
   border-right: 1px solid #E8E8E8;
-  background-color: #FBFBFB;
-  background-color: rgb(199, 16, 16);
+  background-color: #555555;
 }
 .SideBar .menu {
   width: 70%;
