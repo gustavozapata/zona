@@ -29,9 +29,6 @@
 }
 
 /* BUTTON */
-.Button {
-  /* position: relative; */
-}
 .Button button {
   position: absolute;
   top: 30px;
@@ -94,7 +91,7 @@
   width: 20%;
   height: 100vh;
   border-right: 1px solid #E8E8E8;
-  background-color: #555555;
+  background-color: #FBFBFB;
 }
 .SideBar .menu {
   width: 70%;
