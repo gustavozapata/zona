@@ -26,10 +26,10 @@ exports.checkBody = (req, res, next) => {
   next();
 };
 
-//getAll
+//getAll TODO:
 exports.getProducts = (req, res) => {
   conn
-    .collection("products")
+    .collection("posts")
     .find({})
     .toArray((err, db_res) => {
       res.send(db_res);
@@ -47,14 +47,15 @@ exports.addProduct = (req, res) => {
   });
 };
 
-//witeteAll
+//witeteAll TODO:
 exports.insertProducts = (req, res) => {
-  const data = require("../data/db");
-  conn.collection("products").insertMany(data, () => {
+  const data = require("../data/zona");
+  console.log(data);
+  conn.collection("posts").insertMany(data, () => {
     res.json({
-      api: "write all products",
+      api: "write all posts",
       status: 200,
-      description: "wrote all products successfully"
+      description: "wrote all posts successfully"
     });
   });
 };

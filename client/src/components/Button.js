@@ -9,7 +9,7 @@ export default function Button(props) {
       <div className="btn-menu" style={showOrHide()}>
         <ul>
           {items.map(item => (
-            <li>
+            <li key={item.id}>
               <img
                 src={require(`../images/icons/${item.image}`)}
                 alt={item.label}
