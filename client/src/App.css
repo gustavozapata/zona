@@ -26,18 +26,14 @@ button:hover {
 /* APP */
 main {
   width: 80%;
-  margin: 30px auto;
-  height: 73vh;
+  margin: 10px auto;
+  height: 65vh;
 }
 main h1 {
-  text-align: left;
+  /* text-align: left; */
   font-weight: 900;
-  font-size: 2.6em;
-}
-main h2 {
-  margin: 60px auto 40px auto;
-  font-size: 2em;
-  color: #ff5b1f;
+  font-size: 2.5em;
+  margin-top: 0px;
 }
 main button {
   display: block;
@@ -45,6 +41,38 @@ main button {
   width: 120px;
   font-size: 1.1em;
   font-weight: 800;
+}
+.invite-code {
+  margin: 80px auto;
+}
+.invite-code input {
+  width: 50px;
+  height: 50px;
+  border: 1px solid black;
+  text-align: center;
+  font-size: 1.7em;
+  margin: 0 5px;
+}
+.invite-code p {
+  color: #2b9ef2;
+  width: 150px;
+  text-align: center;
+  font-weight: 600;
+  margin: 20px auto;
+}
+.invite-code .button {
+  margin-top: 80px;
+  margin-bottom: 6px;
+}
+p.have-account {
+  color: #828384;
+  font-weight: 500;
+  margin-top: 4px;
+}
+.have-account span {
+  text-decoration: underline;
+  color: #2b9ef2;
+  cursor: pointer;
 }
 
 /* HEADER */
@@ -55,7 +83,7 @@ main button {
   /* background-color: var(--blue-dark); */
 }
 .Header header {
-  margin-left: 20%;
+  /* margin-left: 20%; */
 }
 header h1 {
   display: inline-block;
@@ -67,6 +95,7 @@ header h1 {
   border-top-left-radius: 25px;
   border-left: 4px solid rgb(43, 43, 43);
   border-top: 4px solid rgb(43, 43, 43);
+  cursor: pointer;
 }
 
 /* BUTTON */
@@ -171,7 +200,7 @@ header h1 {
 
 /* CONTENT */
 .Content {
-  margin-left: 20%;
+  /* margin-left: 20%; */
   margin-top: 60px;
 }
 .Content .post {
@@ -215,6 +244,48 @@ header h1 {
 /* PROFILE */
 .Footer {
   margin: 50px auto;
-  margin-left: 20%;
+  /* margin-left: 20%; */
   text-align: center;
+}
+
+/* SIGN UP */
+.SignUp {
+  margin: 10px auto;
+  width: 300px;
+  /* border: 1px solid red; */
+  text-align: center;
+}
+.SignUp h1 {
+  text-align: left;
+  font-size: 32px;
+  font-weight: 700;
+  margin-top: 0;
+}
+.inputs {
+  text-align: left;
+}
+.elform div {
+  margin: 35px auto;
+}
+.elform input {
+  border: none;
+  border-bottom: 1px solid grey;
+  width: 97%;
+  outline: none;
+  padding-left: 1px;
+  padding-bottom: 2px;
+  font-size: 1.1em;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  color: #555555;
+  margin-top: 10px;
+}
+.elform label {
+  font-weight: 600;
+  font-size: 1.1em;
+  margin-bottom: 25px;
+}
+.elform button {
+  font-size: 1.1em;
+  font-weight: 800;
 }

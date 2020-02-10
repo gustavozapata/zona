@@ -4,6 +4,7 @@ const morgan = require("morgan");
 
 const productRouter = require("./routes/productRoutes");
 const itemRouter = require("./routes/itemRoutes");
+const loginRouter = require("./routes/loginRoutes");
 
 const app = express();
 
@@ -19,5 +20,8 @@ app.use(express.json()); //allows us to access the body of the request
 //ROUTES - MOUNTING THE ROUTERS
 app.use("/api/v1/products", productRouter);
 app.use("/api/v1/items", itemRouter);
+
+//ZONA
+app.use("/api/v1/login", loginRouter);
 
 module.exports = app;
