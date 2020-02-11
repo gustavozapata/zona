@@ -3,14 +3,7 @@ const dotenv = require("dotenv");
 
 dotenv.config();
 
-//DATABASE
-const db = process.env.MONGO_URI;
-mongoose
-  .connect(db, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log("*** Connected to MongoDB ***"))
-  .catch(error => console.log(error));
-const conn = mongoose.connection;
-//DATABASE
+const conn = { void: true }; //BORRAR
 
 exports.checkId = (req, res, next, val) => {
   console.log(`the id is: ${val}`);

@@ -1,27 +1,26 @@
 const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
+const dotenv = require("dotenv");
 
 const productRouter = require("./routes/productRoutes");
-const itemRouter = require("./routes/itemRoutes");
-const loginRouter = require("./routes/loginRoutes");
+const userRouter = require("./routes/userRoutes");
 
 const app = express();
 
+dotenv.config();
+
 //MIDDLEWARE
-// if (process.env.NODE_env === "development") { USE THIS ONE WHEN USING dotenv()
-if (app.get("env") === "development") {
+// if (app.get("env") === "development") { //USE THIS ONE WHEN NO USING dotenv()
+if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev")); //logs all the end-point calls
 }
-app.use(cors()); //allows *
-app.use(express.static("public")); //serves files (html, css, js) in the public folder
+app.use(cors()); //allow-access: *
+app.use(express.static("public")); //serves files (html, css, js) in the "public" folder
 app.use(express.json()); //allows us to access the body of the request
 
 //ROUTES - MOUNTING THE ROUTERS
 app.use("/api/v1/products", productRouter);
-app.use("/api/v1/items", itemRouter);
-
-//ZONA
-app.use("/api/v1/login", loginRouter);
+app.use("/api/v1/users", userRouter);
 
 module.exports = app;

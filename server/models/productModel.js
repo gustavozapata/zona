@@ -1,4 +1,4 @@
-//THIS FILE IS OUR MODEL THE SCHELETON OF OUR COLLECTION (TABLE)
+//THIS FILE IS OUR MODEL THE SCHELETON OF OUR COLLECTION (TABLE) - IT'S LIKE A CLASS IN OOP
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
