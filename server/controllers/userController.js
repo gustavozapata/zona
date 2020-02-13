@@ -1,17 +1,5 @@
 const User = require("../models/userModel");
 
-//DATABASE -- BORRAR
-// const mongoose = require("mongoose");
-// const dotenv = require("dotenv");
-// dotenv.config();
-// const db = process.env.DB_URI.replace("<PASSWORD>", process.env.DB_PASSWORD);
-// mongoose
-//   .connect(db, { useNewUrlParser: true, useUnifiedTopology: true })
-//   .then(() => console.log("*** Login DB ***"))
-//   .catch(error => console.log(error));
-// const conn = mongoose.connection;
-//DATABASE -- BORRAR
-
 //ZONA
 exports.createUser = async (req, res) => {
   try {
@@ -29,23 +17,85 @@ exports.createUser = async (req, res) => {
     });
   }
 };
+
+exports.getAllUsers = async (req, res) => {
+  //I DONT THINK THIS IS SECURE (GET ALL USERS)
+  try {
+    const users = await User.find();
+    res.status(200).json({
+      status: "success",
+      results: users.length,
+      data: { users }
+    });
+  } catch (err) {
+    res.status(404).json({
+      status: "fail",
+      message: err
+    });
+  }
+};
+
+exports.getUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    res.status(200).json({
+      status: "success",
+      data: { user }
+    });
+  } catch (err) {
+    res.status(404).json({
+      status: "fail",
+      message: err
+    });
+  }
+};
 //ZONA
 
+exports.updateUser = async (req, res) => {
+  try {
+    const user = await User.findByIdAndUpdate(req.params.id);
+    res.status(200).json({
+      status: "success",
+      data: { user }
+    });
+  } catch (err) {
+    res.status(404).json({
+      status: "fail",
+      message: err
+    });
+  }
+};
+
+exports.deleteUser = async (req, res) => {
+  try {
+    const user = await User.findByIdAndDelete(req.params.id);
+    res.status(204).json({
+      status: "success",
+      data: { user }
+    });
+  } catch (err) {
+    res.status(404).json({
+      status: "fail",
+      message: err
+    });
+  }
+};
+
 exports.isLogged = (req, res) => {
-  res.send("isLogged");
+  // res.send("isLogged");
 };
 
 exports.checkLogin = (req, res) => {
-  const { email, password } = req.body;
-  conn
-    .collection("users")
-    .find({ email, password })
-    .toArray((err, db_res) => {
-      console.log(db_res);
-      if (db_res.length > 0) {
-        res.json({ logged: true });
-      } else {
-        res.json({ logged: false });
-      }
-    });
+  // const { email, password } = req.body;
+  // conn
+  //   .collection("users")
+  //   .find({ email, password })
+  //   .toArray((err, db_res) => {
+  //     console.log(db_res);
+  //     if (db_res.length > 0) {
+  //       res.json({ logged: true });
+  //     } else {
+  //       res.json({ logged: false });
+  //     }
+  //   });
 };
