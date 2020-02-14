@@ -18,8 +18,8 @@ exports.createUser = async (req, res) => {
   }
 };
 
+//TODO: I DONT THINK THIS IS SECURE (GET ALL USERS)
 exports.getAllUsers = async (req, res) => {
-  //I DONT THINK THIS IS SECURE (GET ALL USERS)
   try {
     const users = await User.find();
     res.status(200).json({
@@ -49,11 +49,13 @@ exports.getUser = async (req, res) => {
     });
   }
 };
-//ZONA
 
 exports.updateUser = async (req, res) => {
   try {
-    const user = await User.findByIdAndUpdate(req.params.id);
+    const user = await User.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true
+    });
     res.status(200).json({
       status: "success",
       data: { user }
@@ -68,10 +70,10 @@ exports.updateUser = async (req, res) => {
 
 exports.deleteUser = async (req, res) => {
   try {
-    const user = await User.findByIdAndDelete(req.params.id);
+    await User.findByIdAndDelete(req.params.id);
     res.status(204).json({
       status: "success",
-      data: { user }
+      data: null
     });
   } catch (err) {
     res.status(404).json({
@@ -80,6 +82,7 @@ exports.deleteUser = async (req, res) => {
     });
   }
 };
+//ZONA
 
 exports.isLogged = (req, res) => {
   // res.send("isLogged");

@@ -9,7 +9,8 @@ const DB = process.env.DB_URI.replace("<PASSWORD>", process.env.DB_PASSWORD);
 mongoose
   .connect(DB, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useCreateIndex: true
   })
   .then(con => {
     console.log("*** Connected to MongoDB ***");
