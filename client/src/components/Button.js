@@ -9,12 +9,7 @@ export default function Button(props) {
       <div className="btn-menu" style={showOrHide()}>
         <ul>
           {items.map(item => (
-            <li
-              key={item.id}
-              onClick={() => {
-                props.showFeed(false);
-              }}
-            >
+            <li key={item.id}>
               <img
                 src={require(`../images/icons/${item.image}`)}
                 alt={item.label}
@@ -34,11 +29,18 @@ export default function Button(props) {
   };
 
   return (
-    <div className="Button">
-      <button onClick={() => setShowMenu(!showMenu)}>{props.label}</button>
+    <>
+      {props.show !== "" && (
+        <div
+          className="Button"
+          style={{ position: "absolute", top: "5px", left: "30px" }}
+        >
+          <button onClick={() => setShowMenu(!showMenu)}>{props.label}</button>
 
-      {/* IF BUTTON HAS MENU, RENDER THE BELOW */}
-      {renderMenu()}
-    </div>
+          {/* IF BUTTON HAS MENU, RENDER THE BELOW */}
+          {renderMenu()}
+        </div>
+      )}
+    </>
   );
 }

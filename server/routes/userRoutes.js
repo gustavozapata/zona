@@ -4,8 +4,13 @@ const router = express.Router();
 
 router
   .route("/")
-  .get(controller.getAllUsers, controller.isLogged)
-  .post(controller.createUser, controller.checkLogin);
+  .get(controller.getAllUsers)
+  .post(controller.createUser);
+
+router
+  .route("/login")
+  .get(controller.isLogged)
+  .post(controller.checkLogin);
 
 router
   .route("/:id")

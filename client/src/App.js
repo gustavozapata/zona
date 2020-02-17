@@ -16,10 +16,11 @@ function App() {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
   const [code, setCode] = useState("");
+  const [user, setUser] = useState("");
 
   useEffect(() => {
     axios
-      .get("http://localhost:4000/api/v1/login")
+      .get("http://localhost:4000/api/v1/users/login")
       .then(res => console.log(res.data));
   }, []);
 
@@ -46,18 +47,24 @@ function App() {
 
   const checkLogin = (email, password) => {
     axios
-      .post("http://localhost:4000/api/v1/login", { email, password })
+      .post("http://localhost:4000/api/v1/users/login", { email, password })
       .then(res => {
         if (res.data.logged) {
           setIsLogged(true);
           setShowLogin(false);
+          setUser(res.data.user);
         }
       });
   };
 
+  const signUp = () => {
+    setShowLogin(true);
+    setShowSignup(false);
+  };
+
   return (
     <div className="App">
-      <Header />
+      <Header user={user} />
       {isLogged ? (
         <Feed />
       ) : (
@@ -91,7 +98,7 @@ function App() {
               )}
             </main>
           ) : (
-            <SignUp />
+            <SignUp signUp={signUp} />
           )}
         </>
       )}

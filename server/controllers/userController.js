@@ -3,6 +3,7 @@ const User = require("../models/userModel");
 //ZONA
 exports.createUser = async (req, res) => {
   try {
+    console.log(req.body);
     const newUser = await User.create(req.body);
     res.status(200).json({
       status: "success",
@@ -21,7 +22,27 @@ exports.createUser = async (req, res) => {
 //TODO: I DONT THINK THIS IS SECURE (GET ALL USERS)
 exports.getAllUsers = async (req, res) => {
   try {
-    const users = await User.find();
+    //BUILD QUERY
+    //creates a copy of the request.query object e.g. {duration: 7, price: 234}
+    const queryObj = { ...req.query };
+
+    //we don't want to include these (since they aren't actual properties of the User object)
+    const excludedFields = ["page", "sort", "limit", "fields"];
+    excludedFields.forEach(el => delete queryObj[el]); //deletes page, sort, etc from the query object
+
+    let query = User.find(queryObj); //this is like: find({duration: 7, price: {gte: 100} })
+
+    //Sort
+    if (req.query.sort) {
+      query = query.sort(req.query.sort); //this is like: sort(price) | from the url: /users?sort=price
+    } else {
+      query = query.sort("-createdAt");
+    }
+
+    //EXECUTE QUERY
+    const users = await query; //User.find({duration: 7}).sort(price)
+
+    //SEND RESPONSE
     res.status(200).json({
       status: "success",
       results: users.length,
@@ -84,21 +105,16 @@ exports.deleteUser = async (req, res) => {
 };
 //ZONA
 
-exports.isLogged = (req, res) => {
-  // res.send("isLogged");
+exports.checkLogin = async (req, res) => {
+  const { email, password } = req.body;
+  const user = await User.find({ email, password });
+  if (user.length > 0) {
+    res.json({ logged: true, user: user[0].name });
+  } else {
+    res.json({ logged: false });
+  }
 };
 
-exports.checkLogin = (req, res) => {
-  // const { email, password } = req.body;
-  // conn
-  //   .collection("users")
-  //   .find({ email, password })
-  //   .toArray((err, db_res) => {
-  //     console.log(db_res);
-  //     if (db_res.length > 0) {
-  //       res.json({ logged: true });
-  //     } else {
-  //       res.json({ logged: false });
-  //     }
-  //   });
+exports.isLogged = (req, res) => {
+  res.send("isLogged? set a session in cookies?");
 };

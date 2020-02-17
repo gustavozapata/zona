@@ -19,10 +19,10 @@ export class Content extends Component {
       isLoading: true
     });
     axios
-      .get("http://localhost:4000/api/v1/products")
+      .get("http://localhost:4000/api/v1/posts")
       .then(res => {
         this.setState({
-          data: res.data,
+          data: res.data.data.posts,
           isLoading: false
         });
       })
