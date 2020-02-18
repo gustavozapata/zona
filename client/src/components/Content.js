@@ -49,14 +49,18 @@ export class Content extends Component {
           />
         )}
         {/* <button onClick={() => this.writeAll()}>Write</button> */}
-        {this.state.data.map(post => (
-          <div className="post" key={post.id}>
+        {this.state.data.map((post, i) => (
+          <div className="post" key={i}>
             <h3>{post.title}</h3>
             <div className="profile-pic">
               <img src={require(`../images/${post.by}.png`)} alt={post.by} />
               <p>{post.date}</p>
             </div>
-            <img src={require(`../images/${post.image}`)} alt={post.title} />
+            <img
+              className="post-pic"
+              src={require(`../images/${post.image}`)}
+              alt={post.title}
+            />
             <br />
             <p>{post.location}</p>
             <button className="check"></button>

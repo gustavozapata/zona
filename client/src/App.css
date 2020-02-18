@@ -82,9 +82,7 @@ p.have-account {
   text-align: center;
   /* background-color: var(--blue-dark); */
 }
-.Header header {
-  /* margin-left: 20%; */
-}
+
 header h1 {
   display: inline-block;
   font-weight: 500;
@@ -239,6 +237,9 @@ header h1 {
   border-radius: 50%;
   border: 2px solid rgb(203, 203, 203);
   vertical-align: middle;
+}
+.post-pic {
+  width: 600px;
 }
 
 /* PROFILE */

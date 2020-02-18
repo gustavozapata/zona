@@ -16,7 +16,6 @@ export default function SingUp(props) {
     axios
       .post("http://localhost:4000/api/v1/users", { name, email, password })
       .then(res => {
-        console.log(res);
         props.signUp();
       })
       .catch(err => console.log(err));
