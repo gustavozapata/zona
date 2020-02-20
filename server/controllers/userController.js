@@ -1,4 +1,12 @@
 const User = require("../models/userModel");
+const APIFeatures = require("../utils/apiFeatures");
+
+exports.usersAlias = (req, res, next) => {
+  req.query.sort = "name";
+  req.query.fields = "email,password";
+  req.query.limit = "5";
+  next();
+};
 
 //ZONA
 exports.createUser = async (req, res) => {
@@ -22,25 +30,12 @@ exports.createUser = async (req, res) => {
 //TODO: I DONT THINK THIS IS SECURE (GET ALL USERS)
 exports.getAllUsers = async (req, res) => {
   try {
-    //BUILD QUERY
-    //creates a copy of the request.query object e.g. {duration: 7, price: 234}
-    const queryObj = { ...req.query };
-
-    //we don't want to include these (since they aren't actual properties of the User object)
-    const excludedFields = ["page", "sort", "limit", "fields"];
-    excludedFields.forEach(el => delete queryObj[el]); //deletes page, sort, etc from the query object
-
-    let query = User.find(queryObj); //this is like: find({duration: 7, price: {gte: 100} })
-
-    //Sort
-    if (req.query.sort) {
-      query = query.sort(req.query.sort); //this is like: sort(price) | from the url: /users?sort=price
-    } else {
-      query = query.sort("-createdAt");
-    }
-
-    //EXECUTE QUERY
-    const users = await query; //User.find({duration: 7}).sort(price)
+    const features = new APIFeatures(User.find(), req.query)
+      .filter()
+      .sort()
+      .limitFields()
+      .paginate();
+    const users = await features.query;
 
     //SEND RESPONSE
     res.status(200).json({

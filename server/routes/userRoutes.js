@@ -7,6 +7,8 @@ router
   .get(controller.getAllUsers)
   .post(controller.createUser);
 
+router.route("/top-5-users").get(controller.usersAlias, controller.getAllUsers);
+
 router
   .route("/login")
   .get(controller.isLogged)
