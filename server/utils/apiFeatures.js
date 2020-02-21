@@ -1,4 +1,5 @@
 class APIFeatures {
+  //APIFeatures(Tour.find(), req.query)
   constructor(query, queryString) {
     this.query = query;
     this.queryString = queryString;
@@ -19,7 +20,7 @@ class APIFeatures {
   }
 
   sort() {
-    if (this.queryString) {
+    if (this.queryString.sort) {
       const sort = this.queryString.sort.split(",").join(" ");
       this.query = this.query.sort(sort); //this is like: sort(price) | from the url: /users?sort=price
     } else {
