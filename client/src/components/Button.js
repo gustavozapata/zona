@@ -9,7 +9,10 @@ export default function Button(props) {
       <div className="btn-menu" style={showOrHide()}>
         <ul>
           {items.map(item => (
-            <li key={item.id}>
+            <li
+              key={item.id}
+              onClick={item.label === "Imagen" ? addPost : undefined}
+            >
               <img
                 src={require(`../images/icons/${item.image}`)}
                 alt={item.label}
@@ -26,6 +29,11 @@ export default function Button(props) {
     return {
       display: showMenu ? "block" : "none"
     };
+  };
+
+  const addPost = () => {
+    props.showNewPost();
+    setShowMenu(!showMenu);
   };
 
   return (

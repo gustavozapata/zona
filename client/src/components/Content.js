@@ -22,7 +22,7 @@ export class Content extends Component {
       .get("http://localhost:4000/api/v1/posts")
       .then(res => {
         this.setState({
-          data: res.data.data.posts,
+          data: res.data.data.posts.reverse(),
           isLoading: false
         });
       })
@@ -30,13 +30,6 @@ export class Content extends Component {
         console.log(err);
       });
   }
-
-  // writeAll() {
-  //   axios.post("http://localhost:4000/api/v1/products").then(res => {
-  //     this.getAll();
-  //     console.log(res.data.description);
-  //   });
-  // }
 
   render() {
     return (
@@ -48,10 +41,9 @@ export class Content extends Component {
             alt="loading gif"
           />
         )}
-        {/* <button onClick={() => this.writeAll()}>Write</button> */}
         {this.state.data.map((post, i) => (
           <div className="post" key={i}>
-            <h3>{post.title}</h3>
+            <h3>{post.location}</h3>
             <div className="profile-pic">
               <img src={require(`../images/${post.by}.png`)} alt={post.by} />
               <p>{post.date}</p>
@@ -59,10 +51,10 @@ export class Content extends Component {
             <img
               className="post-pic"
               src={require(`../images/${post.image}`)}
-              alt={post.title}
+              alt={post.location}
             />
             <br />
-            <p>{post.location}</p>
+            <p>{post.description}</p>
             <button className="check"></button>
           </div>
         ))}

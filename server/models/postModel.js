@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const postSchema = new Schema({
-  title: {
+  description: {
     type: String,
     required: [true, "you must enter a title"]
   },
@@ -11,13 +11,17 @@ const postSchema = new Schema({
     type: String,
     required: true
   },
-  author: {
+  by: {
     type: String,
     required: true
   },
-  createdAt: {
-    type: Date,
+  date: {
+    type: String,
     default: Date.now()
+  },
+  location: {
+    type: String,
+    required: true
   }
 });
 

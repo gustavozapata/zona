@@ -290,3 +290,115 @@ header h1 {
   font-size: 1.1em;
   font-weight: 800;
 }
+
+/* NEWPOST */
+.NewPost {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-color: rgba(200, 200, 200, 0.5);
+  z-index: 101;
+  overflow-y: scroll;
+}
+.NewPost .popup {
+  width: 70%;
+  /* height: 500px; */
+  min-height: 350px;
+  background-color: white;
+  margin: 30px auto 5px auto;
+  border-radius: 15px;
+  border: 1px solid rgb(220, 220, 220);
+}
+.popup h2 {
+  clear: both;
+  margin-top: 0;
+  font-size: 1.8em;
+}
+.close {
+  /* display: block; */
+  width: 30px;
+  height: 30px;
+  border: 2px solid black;
+  border-radius: 50%;
+  cursor: pointer;
+  float: right;
+  margin: 20px 20px 0 0;
+}
+.close p {
+  margin: 0;
+  font-weight: 600;
+  vertical-align: middle;
+  margin-top: 3px;
+  font-size: 1.2em;
+}
+.choose-image div {
+  display: inline-block;
+}
+.choose-image h3 {
+  margin: 40px 0 30px 0;
+}
+.choose-image span {
+  display: inline-block;
+  border: 1px solid grey;
+  border-radius: 5px;
+  padding: 5px 10px;
+  margin: 10px 60px 15px 60px;
+  cursor: pointer;
+}
+.choose-image div p {
+  margin: 0;
+  cursor: pointer;
+}
+.post-btn {
+  margin: 40px 15px 20px 15px;
+  /* background-color: rgb(17, 99, 231); */
+}
+.post-btn:hover {
+  background-color: rgb(30, 122, 228);
+  color: white;
+}
+#file-preview {
+  height: 300px;
+}
+.info-post {
+  text-align: left;
+  float: right;
+  margin-right: 70px;
+}
+.info-post label {
+  font-size: 1.1em;
+  font-weight: 700;
+  margin-bottom: 5px;
+  display: inline-block;
+}
+.info-post textarea {
+  resize: none;
+  border: 1px solid rgb(204, 204, 204);
+  border-radius: 5px;
+  outline: none;
+  padding: 6px;
+  width: 200px;
+  height: 120px;
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.95em;
+}
+#file-name {
+  font-size: 0.9em;
+  color: rgb(136, 136, 136);
+  margin-top: 10px;
+  cursor: default;
+}
+.cancel-btn:hover {
+  background-color: rgb(65, 195, 246);
+}
+#location {
+  border: none;
+  border-bottom: 1px solid rgb(204, 204, 204);
+  width: 200px;
+  outline: none;
+  margin-top: 5px;
+  padding: 5px;
+  font-size: 1em;
+}
