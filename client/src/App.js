@@ -15,6 +15,7 @@ function App() {
   const [isLogged, setIsLogged] = useState(true);
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
+  const [showNewPost, setShowNewPost] = useState(false);
   const [code, setCode] = useState("");
   const [user, setUser] = useState("gustavo");
 
@@ -62,11 +63,15 @@ function App() {
     setShowSignup(false);
   };
 
+  const openNewPost = () => {
+    setShowNewPost(true);
+  };
+
   return (
     <div className="App">
-      <Header user={user} />
+      <Header user={user} showNewPost={openNewPost} />
       {isLogged ? (
-        <Feed />
+        <Feed user={user} showNewPost={showNewPost} />
       ) : (
         <>
           {!showSignup ? (

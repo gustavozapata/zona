@@ -43,6 +43,7 @@ export default function NewPost(props) {
         })
         .then(() => {
           props.closeNewPost();
+          props.addPost();
         });
     }
   };

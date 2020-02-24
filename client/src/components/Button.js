@@ -11,7 +11,7 @@ export default function Button(props) {
           {items.map(item => (
             <li
               key={item.id}
-              onClick={item.label === "Imagen" ? addPost : undefined}
+              onClick={item.label === "Imagen" ? openNewPost : undefined}
             >
               <img
                 src={require(`../images/icons/${item.image}`)}
@@ -31,7 +31,7 @@ export default function Button(props) {
     };
   };
 
-  const addPost = () => {
+  const openNewPost = () => {
     props.showNewPost();
     setShowMenu(!showMenu);
   };

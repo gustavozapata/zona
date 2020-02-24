@@ -1,10 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import Button from "./Button";
-import NewPost from "./NewPost";
 
 export default function Header(props) {
-  const [showNewPost, setShowNewPost] = useState(false);
-
   const styles = {
     userName: {
       position: "absolute",
@@ -16,17 +13,8 @@ export default function Header(props) {
     }
   };
 
-  const Image = () => {
-    setShowNewPost(true);
-  };
-
-  const closeNewPost = () => {
-    setShowNewPost(false);
-  };
-
   return (
     <div className="Header">
-      {showNewPost && <NewPost closeNewPost={closeNewPost} user={props.user} />}
       <header>
         <h1
           onClick={() => {
@@ -36,7 +24,7 @@ export default function Header(props) {
           Zona
         </h1>
         <p style={styles.userName}>{props.user}</p>
-        <Button label="New" show={props.user} showNewPost={Image} />
+        <Button label="New" show={props.user} showNewPost={props.showNewPost} />
       </header>
     </div>
   );
