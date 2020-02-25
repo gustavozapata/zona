@@ -303,11 +303,12 @@ header h1 {
   overflow-y: scroll;
 }
 .NewPost .popup {
-  width: 70%;
+  width: 650px;
   /* height: 500px; */
   min-height: 350px;
   background-color: white;
   margin: 30px auto 5px auto;
+  padding-bottom: 10px;
   border-radius: 15px;
   border: 1px solid rgb(220, 220, 220);
 }
@@ -352,7 +353,7 @@ header h1 {
   cursor: pointer;
 }
 .post-btn {
-  margin: 40px 15px 20px 15px;
+  margin: 40px 15px 40px 15px;
   /* background-color: rgb(17, 99, 231); */
 }
 .post-btn:hover {
@@ -360,7 +361,7 @@ header h1 {
   color: white;
 }
 #file-preview {
-  height: 300px;
+  max-width: 250px;
 }
 .info-post {
   text-align: left;
@@ -394,11 +395,12 @@ header h1 {
   background-color: rgb(65, 195, 246);
 }
 #location {
+  display: inline-block;
   border: none;
   border-bottom: 1px solid rgb(204, 204, 204);
   width: 200px;
   outline: none;
-  margin-top: 5px;
+  margin: 5px 0;
   padding: 5px;
   font-size: 1em;
 }

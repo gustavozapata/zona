@@ -13,20 +13,6 @@ export class Feed extends Component {
     };
   }
 
-  componentDidUpdate(prevProps) {
-    if (this.props.showNewPost !== prevProps.showNewPost) {
-      this.setState({
-        showNewPost: this.props.showNewPost
-      });
-    }
-  }
-
-  openNewPost = () => {
-    this.setState({
-      showNewPost: true
-    });
-  };
-
   closeNewPost = () => {
     this.setState({
       showNewPost: false
@@ -42,14 +28,14 @@ export class Feed extends Component {
   render() {
     return (
       <div className="Feed">
-        {this.state.showNewPost && (
+        {this.props.showNewPost && (
           <NewPost
-            closeNewPost={this.closeNewPost}
+            closeNewPost={this.props.closeNewPost}
             user={this.props.user}
             addPost={this.addPost}
           />
         )}
-        <Content addPost={this.state.newPostAdded} />
+        <Content postAdded={this.state.newPostAdded} />
         {/* <SideBar /> */}
       </div>
     );

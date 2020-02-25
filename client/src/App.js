@@ -17,7 +17,7 @@ function App() {
   const [showSignup, setShowSignup] = useState(false);
   const [showNewPost, setShowNewPost] = useState(false);
   const [code, setCode] = useState("");
-  const [user, setUser] = useState("gustavo");
+  const [user, setUser] = useState("Andres");
 
   useEffect(() => {
     axios
@@ -67,11 +67,19 @@ function App() {
     setShowNewPost(true);
   };
 
+  const closeNewPost = () => {
+    setShowNewPost(false);
+  };
+
   return (
     <div className="App">
       <Header user={user} showNewPost={openNewPost} />
       {isLogged ? (
-        <Feed user={user} showNewPost={showNewPost} />
+        <Feed
+          user={user}
+          showNewPost={showNewPost}
+          closeNewPost={closeNewPost}
+        />
       ) : (
         <>
           {!showSignup ? (

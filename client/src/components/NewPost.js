@@ -32,14 +32,20 @@ export default function NewPost(props) {
   const post = e => {
     e.preventDefault();
     if (isImageChosen) {
+      const options = {
+        year: "numeric",
+        month: "short",
+        day: "numeric"
+      };
       axios
         .post("http://localhost:4000/api/v1/posts", {
           description,
           // image: file[0].name,
           image: "sj.jpeg",
+          // imageData: "",
           by: props.user,
           location,
-          date: "Feb 23"
+          date: new Date().toLocaleDateString("en-US", options)
         })
         .then(() => {
           props.closeNewPost();
@@ -76,6 +82,17 @@ export default function NewPost(props) {
                   </p>
                 </div>
                 <div className="info-post">
+                  <label htmlFor="location">Location</label>
+                  <br />
+                  <input
+                    type="text"
+                    id="location"
+                    required
+                    value={location}
+                    onChange={e => setLocation(e.target.value)}
+                  />
+                  <br />
+                  <br />
                   <label htmlFor="description">Description</label>
                   <br />
                   <textarea
@@ -89,16 +106,6 @@ export default function NewPost(props) {
                     onChange={e => setDescription(e.target.value)}
                   ></textarea>
                   <br />
-                  <br />
-                  <label htmlFor="location">Location</label>
-                  <br />
-                  <input
-                    type="text"
-                    id="location"
-                    required
-                    value={location}
-                    onChange={e => setLocation(e.target.value)}
-                  />
                 </div>
               </>
             ) : (
@@ -113,6 +120,7 @@ export default function NewPost(props) {
                   <br />
                   <input
                     ref={fileRef}
+                    name="postImage"
                     type="file"
                     hidden
                     accept="image/*"

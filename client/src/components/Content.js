@@ -14,6 +14,12 @@ export class Content extends Component {
     this.getAll();
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.postAdded !== this.props.postAdded) {
+      this.getAll();
+    }
+  }
+
   getAll() {
     this.setState({
       isLoading: true
@@ -31,6 +37,13 @@ export class Content extends Component {
       });
   }
 
+  delete(id) {
+    console.log(id);
+    axios.delete(`http://localhost:4000/api/v1/posts/${id}`).then(() => {
+      this.getAll();
+    });
+  }
+
   render() {
     return (
       <div className="Content">
@@ -45,17 +58,23 @@ export class Content extends Component {
           <div className="post" key={i}>
             <h3>{post.location}</h3>
             <div className="profile-pic">
-              <img src={require(`../images/${post.by}.png`)} alt={post.by} />
+              <img
+                src={require(`../images/users/${post.by.toLowerCase()}.png`)}
+                alt={post.by}
+              />
               <p>{post.date}</p>
             </div>
             <img
               className="post-pic"
-              src={require(`../images/${post.image}`)}
+              src={require(`../images/posts/${post.image}`)}
               alt={post.location}
             />
             <br />
             <p>{post.description}</p>
-            <button className="check"></button>
+            <button
+              className="check"
+              onClick={() => this.delete(post._id)}
+            ></button>
           </div>
         ))}
       </div>
