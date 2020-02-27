@@ -13,6 +13,12 @@ export default function Header(props) {
     }
   };
 
+  const gzUI = async () => {
+    await fetch("http://localhost:4000/api/v1/posts/stats")
+      .then(res => res.json())
+      .then(res => console.log(res));
+  };
+
   return (
     <div className="Header">
       <header>
@@ -23,7 +29,9 @@ export default function Header(props) {
         >
           Zona
         </h1>
-        <p style={styles.userName}>{props.user}</p>
+        <p style={styles.userName} onClick={gzUI}>
+          {props.user}
+        </p>
         <Button label="New" show={props.user} showNewPost={props.showNewPost} />
       </header>
     </div>

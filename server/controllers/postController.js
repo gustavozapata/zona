@@ -1,5 +1,6 @@
 const Post = require("../models/postModel");
 const dotenv = require("dotenv");
+const gzUI = require("gz-ui-react");
 
 dotenv.config();
 
@@ -37,22 +38,37 @@ exports.getPosts = async (req, res) => {
 //insertOne
 exports.addPost = async (req, res) => {
   try {
-    /*if (req.files === null) {
-      return res.status(400).json({ msg: "No file uploaded" });
-    }
-    const file = req.files.postImage;
-    file.mv(`${__dirname}/client/public/uploads/${file.name}`, err => {
-      if (err) {
-        console.error(err);
-        return res.status(500).send(err);
-      }
-      res.json({ fileName: file.name, filePath: `/uploads/${file.name}` });
-    });*/
-
     const newPost = await Post.create(req.body);
     res.status(200).json({
       status: "success",
       data: { post: newPost }
+    });
+  } catch (err) {
+    res.status(404).json({
+      status: "fail",
+      message: err
+    });
+  }
+};
+//saveImage
+exports.saveImage = async (req, res) => {
+  try {
+    const file = req.files.postImage;
+    //${__dirname}/client/public/
+    file.mv(
+      `/Users/guquinon/Downloads/GZ/Development/zona/client/src/images/posts/${file.name}`,
+      err => {
+        if (err) {
+          return res.status(500).json({
+            status: "fail",
+            message: err
+          });
+        }
+      }
+    );
+    res.status(200).json({
+      status: "success",
+      data: file.name
     });
   } catch (err) {
     res.status(404).json({
@@ -99,4 +115,38 @@ exports.deletePosts = (req, res) => {
       description: "deleted all posts successfully"
     });
   });
+};
+
+//MONGO/MONGOOSE AGGREGATION
+exports.stats = async (req, res) => {
+  const randomNum = gzUI(5, 10); //my own npm package
+  try {
+    const stats = await Post.aggregate([
+      {
+        $match: { by: "gustavo" }
+      },
+      {
+        $group: {
+          _id: "$location",
+          total: { $sum: 1 }
+        }
+      },
+      {
+        $sort: { _id: 1 }
+      },
+      {
+        $project: { total: 0 }
+      }
+    ]);
+    res.status(200).json({
+      status: "success",
+      data: stats,
+      randomNum
+    });
+  } catch (err) {
+    res.status(404).json({
+      status: "fail",
+      message: err
+    });
+  }
 };

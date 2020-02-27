@@ -12,10 +12,6 @@ const postSchema = new Schema({
     default: "none",
     required: true
   },
-  // imageData: {
-  //   type: String,
-  //   required: true
-  // },
   by: {
     type: String,
     required: true

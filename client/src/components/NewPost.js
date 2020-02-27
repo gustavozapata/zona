@@ -29,6 +29,25 @@ export default function NewPost(props) {
     }
   };
 
+  const saveImage = async e => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("postImage", file[0]);
+    try {
+      await axios
+        .post("http://localhost:4000/api/v1/posts/images", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data"
+          }
+        })
+        .then(() => {
+          post(e);
+        });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const post = e => {
     e.preventDefault();
     if (isImageChosen) {
@@ -40,9 +59,7 @@ export default function NewPost(props) {
       axios
         .post("http://localhost:4000/api/v1/posts", {
           description,
-          // image: file[0].name,
-          image: "sj.jpeg",
-          // imageData: "",
+          image: file[0].name,
           by: props.user,
           location,
           date: new Date().toLocaleDateString("en-US", options)
@@ -157,7 +174,7 @@ export default function NewPost(props) {
           </button>
           <button
             className="post-btn"
-            onClick={post}
+            onClick={saveImage}
             hidden={isImageChosen ? false : true}
           >
             Post

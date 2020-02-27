@@ -15,6 +15,7 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-fileupload": "^1.1.6",
+    "gz-ui-react": "^1.0.0",
     "mongoose": "^5.8.9",
     "morgan": "^1.9.1"
   }

@@ -38,7 +38,6 @@ export class Content extends Component {
   }
 
   delete(id) {
-    console.log(id);
     axios.delete(`http://localhost:4000/api/v1/posts/${id}`).then(() => {
       this.getAll();
     });
