@@ -6,7 +6,8 @@ export class Content extends Component {
     super(props);
     this.state = {
       isLoading: false,
-      data: []
+      data: [],
+      postLikes: []
     };
   }
 
@@ -43,6 +44,18 @@ export class Content extends Component {
     });
   }
 
+  likePost(id, likes) {
+    axios
+      .patch(`http://localhost:4000/api/v1/posts/${id}`, { likes })
+      .then(res => {
+        this.setState({
+          postLikes: res.data.data
+        });
+        this.getAll();
+      })
+      .catch(err => console.log("my error: ", err));
+  }
+
   render() {
     return (
       <div className="Content">
@@ -53,29 +66,33 @@ export class Content extends Component {
             alt="loading gif"
           />
         )}
-        {this.state.data.map((post, i) => (
-          <div className="post" key={i}>
-            <h3>{post.location}</h3>
-            <div className="profile-pic">
+        {this.state.data.map((post, i) => {
+          return (
+            <div className="post" key={i}>
+              <h3>{post.location}</h3>
+              <div className="profile-pic">
+                <img
+                  src={require(`../images/users/${post.by.toLowerCase()}.png`)}
+                  alt={post.by}
+                />
+                <p>{post.date}</p>
+              </div>
               <img
-                src={require(`../images/users/${post.by.toLowerCase()}.png`)}
-                alt={post.by}
+                className="post-pic"
+                src={require(`../images/posts/${post.image}`)}
+                alt={post.location}
               />
-              <p>{post.date}</p>
+              <br />
+              <p>{post.description}</p>
+              <button
+                className="check"
+                // onClick={() => this.delete(post._id)}
+                onClick={() => this.likePost(post._id, post.likes)}
+              ></button>
+              {post.likes < 1 ? "" : post.likes}
             </div>
-            <img
-              className="post-pic"
-              src={require(`../images/posts/${post.image}`)}
-              alt={post.location}
-            />
-            <br />
-            <p>{post.description}</p>
-            <button
-              className="check"
-              onClick={() => this.delete(post._id)}
-            ></button>
-          </div>
-        ))}
+          );
+        })}
       </div>
     );
   }

@@ -12,12 +12,16 @@ import "./App.css";
 let theCode = "";
 
 function App() {
-  const [isLogged, setIsLogged] = useState(false);
+  const [isLogged, setIsLogged] = useState(true);
+  // const [isLogged, setIsLogged] = useState(false);
+
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
   const [showNewPost, setShowNewPost] = useState(false);
   const [code, setCode] = useState("");
-  const [user, setUser] = useState("");
+
+  // const [user, setUser] = useState("");
+  const [user, setUser] = useState("gustavo");
 
   useEffect(() => {
     axios

@@ -30,6 +30,7 @@ export default function NewPost(props) {
   };
 
   const saveImage = async e => {
+    e.persist();
     e.preventDefault();
     const formData = new FormData();
     formData.append("postImage", file[0]);
@@ -61,6 +62,7 @@ export default function NewPost(props) {
           description,
           image: file[0].name,
           by: props.user,
+          likes: 0,
           location,
           date: new Date().toLocaleDateString("en-US", options)
         })
@@ -102,7 +104,6 @@ export default function NewPost(props) {
                   <label htmlFor="location">Location</label>
                   <br />
                   <input
-                    type="text"
                     id="location"
                     required
                     value={location}
@@ -113,7 +114,6 @@ export default function NewPost(props) {
                   <label htmlFor="description">Description</label>
                   <br />
                   <textarea
-                    name="description"
                     id="description"
                     cols="30"
                     rows="10"

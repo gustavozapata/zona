@@ -6,6 +6,7 @@ router.param("id", controller.checkId); //will execute whenever a param 'id' is 
 
 router.route("/stats").get(controller.stats);
 router.route("/images").post(controller.saveImage);
+router.route("/test").get(controller.testEndPoint);
 
 router
   .route("/")
@@ -15,6 +16,7 @@ router
 router
   .route("/:id")
   .post(controller.checkBody)
+  .patch(controller.likePost)
   .delete(controller.deletePost);
 
 module.exports = router;

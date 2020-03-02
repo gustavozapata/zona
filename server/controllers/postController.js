@@ -1,6 +1,7 @@
 const Post = require("../models/postModel");
 const dotenv = require("dotenv");
 const gzUI = require("gz-ui-react");
+const path = require("path");
 
 dotenv.config();
 
@@ -54,21 +55,42 @@ exports.addPost = async (req, res) => {
 exports.saveImage = async (req, res) => {
   try {
     const file = req.files.postImage;
-    //${__dirname}/client/public/
-    file.mv(
-      `/Users/guquinon/Downloads/GZ/Development/zona/client/src/images/posts/${file.name}`,
-      err => {
-        if (err) {
-          return res.status(500).json({
-            status: "fail",
-            message: err
-          });
-        }
+    const pathSave = path.join(
+      __dirname,
+      `../../client/src/images/posts/${file.name}`
+    );
+    file.mv(pathSave, err => {
+      if (err) {
+        return res.status(500).json({
+          status: "fail",
+          message: err
+        });
+      }
+    });
+    res.status(200).json({
+      status: "success",
+      data: file.name
+    });
+  } catch (err) {
+    res.status(404).json({
+      status: "fail",
+      message: err
+    });
+  }
+};
+//likePost
+exports.likePost = async (req, res) => {
+  try {
+    let likes = req.body.likes + 1;
+    await Post.updateOne(
+      { _id: req.params.id },
+      {
+        likes
       }
     );
     res.status(200).json({
       status: "success",
-      data: file.name
+      data: likes
     });
   } catch (err) {
     res.status(404).json({
@@ -94,26 +116,11 @@ exports.deletePost = async (req, res) => {
   }
 };
 
-//witeteAll
-exports.insertPosts = (req, res) => {
-  const data = require("../data/zona");
-  console.log(data);
-  conn.collection("posts").insertMany(data, () => {
-    res.json({
-      api: "write all posts",
-      status: 200,
-      description: "wrote all posts successfully"
-    });
-  });
-};
-//deleteAll
-exports.deletePosts = (req, res) => {
-  conn.collection("posts").deleteMany({}, () => {
-    res.json({
-      api: "delete all posts",
-      status: 200,
-      description: "deleted all posts successfully"
-    });
+//test-patch
+exports.testEndPoint = (req, res) => {
+  res.status(200).json({
+    status: "success",
+    message: "Testing the end-point: /api/v1/posts/test"
   });
 };
 
