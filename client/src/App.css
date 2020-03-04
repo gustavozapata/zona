@@ -23,6 +23,12 @@ button:hover {
   background-color: #ebebeb;
 }
 
+.warning {
+  color: red;
+  margin-top: -20px;
+  font-size: 0.8em;
+}
+
 /* APP */
 main {
   width: 80%;
@@ -199,12 +205,14 @@ header h1 {
 /* CONTENT */
 .Content {
   /* margin-left: 20%; */
-  margin-top: 60px;
+  width: 98%;
+  min-width: 350px;
+  max-width: 600px;
+  margin: 60px auto 20px auto;
 }
 .Content .post {
   margin: 80px auto 30px auto;
   position: relative;
-  width: 600px;
 }
 .Content .check {
   background-image: url("./images/icons/check.png");
@@ -221,7 +229,7 @@ header h1 {
 }
 .profile-pic {
   position: absolute;
-  top: -15px;
+  top: -40px;
   left: 0px;
 }
 .profile-pic p {
@@ -303,8 +311,9 @@ header h1 {
   overflow-y: scroll;
 }
 .NewPost .popup {
-  width: 650px;
-  /* height: 500px; */
+  width: 90%;
+  max-width: 650px;
+  min-width: 350px;
   min-height: 350px;
   background-color: white;
   margin: 30px auto 5px auto;
@@ -334,8 +343,10 @@ header h1 {
   margin-top: 3px;
   font-size: 1.2em;
 }
-.choose-image div {
-  display: inline-block;
+.post-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .choose-image h3 {
   margin: 40px 0 30px 0;
@@ -365,8 +376,8 @@ header h1 {
 }
 .info-post {
   text-align: left;
-  float: right;
-  margin-right: 70px;
+  /* float: right; */
+  margin-left: 30px;
 }
 .info-post label {
   font-size: 1.1em;
@@ -403,4 +414,18 @@ header h1 {
   margin: 5px 0;
   padding: 5px;
   font-size: 1em;
+}
+
+@media only screen and (max-width: 600px) {
+  .post-container {
+    display: block;
+  }
+  .info-post {
+    text-align: center;
+    margin-left: 0;
+    margin-top: 20px;
+  }
+  .post-pic {
+    width: 99%;
+  }
 }

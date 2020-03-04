@@ -14,7 +14,7 @@ export default function SingUp(props) {
     e.preventDefault();
 
     axios
-      .post("http://localhost:4000/api/v1/users", { name, email, password })
+      .post("http://10.0.0.20:4000/api/v1/users", { name, email, password })
       .then(res => {
         props.signUp();
       })
@@ -70,11 +70,7 @@ export default function SingUp(props) {
               }}
             />
           </div>
-          {!confirmPass && (
-            <p style={{ color: "red", marginTop: "-20px", fontSize: ".8em" }}>
-              Must be same as password
-            </p>
-          )}
+          {!confirmPass && <p className="warning">Must be same as password</p>}
         </div>
         <button className="button">Sign up</button>
       </form>

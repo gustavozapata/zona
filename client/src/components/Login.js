@@ -37,6 +37,9 @@ export default function Login(props) {
               value={password}
             />
           </div>
+          {props.wrongLogin && (
+            <p className="warning">Wrong email or password</p>
+          )}
         </div>
         <button
           className="button"

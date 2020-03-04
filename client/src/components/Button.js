@@ -1,5 +1,8 @@
 import React, { useState } from "react";
-import { items } from "../content/spanish/newItem";
+import { items } from "../content/newItem";
+
+//SPANISH
+// import { items } from "../content/spanish/newItem";
 
 export default function Button(props) {
   const [showMenu, setShowMenu] = useState(false);
@@ -11,7 +14,7 @@ export default function Button(props) {
           {items.map(item => (
             <li
               key={item.id}
-              onClick={item.label === "Imagen" ? openNewPost : undefined}
+              onClick={item.name === "PICTURE" ? openNewPost : undefined}
             >
               <img
                 src={require(`../images/icons/${item.image}`)}
@@ -38,7 +41,7 @@ export default function Button(props) {
 
   return (
     <>
-      {props.show !== "" && (
+      {props.show && (
         <div
           className="Button"
           style={{ position: "absolute", top: "5px", left: "30px" }}

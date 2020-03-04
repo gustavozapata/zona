@@ -12,24 +12,20 @@ import "./App.css";
 let theCode = "";
 
 function App() {
-  const [isLogged, setIsLogged] = useState(true);
-  // const [isLogged, setIsLogged] = useState(false);
-
+  const [isLogged, setIsLogged] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
+  const [wrongLogin, setWrongLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
   const [showNewPost, setShowNewPost] = useState(false);
   const [code, setCode] = useState("");
-
-  // const [user, setUser] = useState("");
-  const [user, setUser] = useState("gustavo");
-
-  useEffect(() => {
-    axios
-      .get("http://localhost:4000/api/v1/users/login")
-      .then(res => console.log(res.data));
-  }, []);
+  const [user, setUser] = useState("");
 
   const enter = useRef();
+
+  useEffect(() => {
+    setIsLogged(sessionStorage.getItem("isLogged"));
+    setUser(sessionStorage.getItem("user"));
+  }, []);
 
   const checkCode = () => {
     if (code === "1234") {
@@ -52,12 +48,16 @@ function App() {
 
   const checkLogin = (email, password) => {
     axios
-      .post("http://localhost:4000/api/v1/users/login", { email, password })
+      .post("http://10.0.0.20:4000/api/v1/users/login", { email, password })
       .then(res => {
         if (res.data.logged) {
-          setIsLogged(true);
+          sessionStorage.setItem("isLogged", true);
+          sessionStorage.setItem("user", res.data.user);
           setShowLogin(false);
-          setUser(res.data.user);
+          setIsLogged(sessionStorage.getItem("isLogged"));
+          setUser(sessionStorage.getItem("user"));
+        } else {
+          setWrongLogin(true);
         }
       });
   };
@@ -65,6 +65,14 @@ function App() {
   const signUp = () => {
     setShowLogin(true);
     setShowSignup(false);
+  };
+
+  const logout = () => {
+    gzUI();
+    sessionStorage.setItem("user", "");
+    sessionStorage.setItem("isLogged", "");
+    setIsLogged(false);
+    setUser("");
   };
 
   const openNewPost = () => {
@@ -75,9 +83,16 @@ function App() {
     setShowNewPost(false);
   };
 
+  //USING MY (GZ) NPM PACKAGE
+  const gzUI = async () => {
+    await fetch("http://10.0.0.20:4000/api/v1/posts/stats")
+      .then(res => res.json())
+      .then(res => console.log(res));
+  };
+
   return (
     <div className="App">
-      <Header user={user} showNewPost={openNewPost} />
+      <Header user={user} showNewPost={openNewPost} logout={logout} />
       {isLogged ? (
         <Feed
           user={user}
@@ -94,7 +109,7 @@ function App() {
                 Zona
               </h1>
               {showLogin ? (
-                <Login login={checkLogin} />
+                <Login login={checkLogin} wrongLogin={wrongLogin} />
               ) : (
                 <div className="invite-code">
                   <form action="">

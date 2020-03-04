@@ -44,6 +44,7 @@ exports.addPost = async (req, res) => {
       status: "success",
       data: { post: newPost }
     });
+    console.log("post added: ", newPost);
   } catch (err) {
     res.status(404).json({
       status: "fail",

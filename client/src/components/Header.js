@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "./Button";
+import { userMenu } from "../content/userMenu";
 
 export default function Header(props) {
+  const [showMenu, setShowMenu] = useState(false);
+
   const styles = {
     userName: {
       position: "absolute",
@@ -13,10 +16,38 @@ export default function Header(props) {
     }
   };
 
-  const gzUI = async () => {
-    await fetch("http://localhost:4000/api/v1/posts/stats")
-      .then(res => res.json())
-      .then(res => console.log(res));
+  const showOrHide = () => {
+    return {
+      display: showMenu ? "block" : "none"
+    };
+  };
+
+  const renderMenu = () => {
+    return (
+      <div className="btn-menu" style={showOrHide()}>
+        <ul>
+          {userMenu.map(item => (
+            <li
+              key={item.id}
+              onClick={
+                item.label === "Log out"
+                  ? () => {
+                      setShowMenu(false);
+                      props.logout();
+                    }
+                  : undefined
+              }
+            >
+              <img
+                src={require(`../images/icons/${item.image}`)}
+                alt={item.label}
+              />
+              {item.label}
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
   };
 
   return (
@@ -29,9 +60,12 @@ export default function Header(props) {
         >
           Zona
         </h1>
-        <p style={styles.userName} onClick={gzUI}>
+        <p style={styles.userName} onClick={() => setShowMenu(!showMenu)}>
           {props.user}
         </p>
+        <div style={{ position: "absolute", top: "-8px", right: "180px" }}>
+          {renderMenu()}
+        </div>
         <Button label="New" show={props.user} showNewPost={props.showNewPost} />
       </header>
     </div>

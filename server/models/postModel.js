@@ -38,5 +38,14 @@ postSchema.virtual("myVirtual").get(function() {
   return this.likes * 5;
 });
 
+postSchema.pre(/^find/, function(next) {
+  this.queryTime = Date.now();
+  next();
+});
+postSchema.post(/^find/, function(doc, next) {
+  console.log(`Query took ${Date.now() - this.queryTime}`);
+  next();
+});
+
 //"posts" is the name of the collection (table)
 module.exports = Post = mongoose.model("posts", postSchema);

@@ -8,7 +8,6 @@ export default function NewPost(props) {
   const [location, setLocation] = useState("");
 
   const fileRef = useRef();
-  const camRef = useRef();
 
   const chooseFile = () => {
     fileRef.current.click();
@@ -36,7 +35,7 @@ export default function NewPost(props) {
     formData.append("postImage", file[0]);
     try {
       await axios
-        .post("http://localhost:4000/api/v1/posts/images", formData, {
+        .post("http://10.0.0.20:4000/api/v1/posts/images", formData, {
           headers: {
             "Content-Type": "multipart/form-data"
           }
@@ -49,7 +48,7 @@ export default function NewPost(props) {
     }
   };
 
-  const post = e => {
+  const post = async e => {
     e.preventDefault();
     if (isImageChosen) {
       const options = {
@@ -57,19 +56,25 @@ export default function NewPost(props) {
         month: "short",
         day: "numeric"
       };
-      axios
-        .post("http://localhost:4000/api/v1/posts", {
-          description,
-          image: file[0].name,
-          by: props.user,
-          likes: 0,
-          location,
-          date: new Date().toLocaleDateString("en-US", options)
-        })
-        .then(() => {
-          props.closeNewPost();
-          props.addPost();
-        });
+      try {
+        await axios
+          .post("http://10.0.0.20:4000/api/v1/posts", {
+            description,
+            image: file[0].name,
+            by: props.user,
+            likes: 0,
+            location,
+            date: new Date().toLocaleDateString("en-US", options)
+          })
+          .then(() => {
+            props.closeNewPost();
+            setTimeout(() => {
+              props.addPost();
+            }, 1000);
+          });
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
 
@@ -89,7 +94,7 @@ export default function NewPost(props) {
           <div className="choose-image">
             {!isImageChosen && <h3>Choose an image</h3>}
             {isImageChosen ? (
-              <>
+              <div className="post-container">
                 <div>
                   <img
                     id="file-preview"
@@ -97,7 +102,9 @@ export default function NewPost(props) {
                     alt="Preview post"
                   />
                   <p id="file-name">
-                    {file[0].name} {returnFileSize(file[0].size)}
+                    {file[0].name}
+                    <br />
+                    {returnFileSize(file[0].size)}
                   </p>
                 </div>
                 <div className="info-post">
@@ -124,13 +131,13 @@ export default function NewPost(props) {
                   ></textarea>
                   <br />
                 </div>
-              </>
+              </div>
             ) : (
               <>
                 <div>
                   <span onClick={chooseFile}>
                     <img
-                      src={require("../images/icons/folder.png")}
+                      src={require("../images/icons/image.png")}
                       alt="Folder"
                     />
                   </span>
@@ -144,23 +151,6 @@ export default function NewPost(props) {
                     onChange={handleChange}
                   />
                   <p onClick={chooseFile}>Choose file</p>
-                </div>
-                <div>
-                  <span>
-                    <img
-                      src={require("../images/icons/camera.png")}
-                      alt="Camera"
-                    />
-                  </span>
-                  <br />
-                  <input
-                    ref={camRef}
-                    type="file"
-                    accept="image/*"
-                    capture="camera"
-                    hidden
-                  />
-                  <p>Take a picture</p>
                 </div>
               </>
             )}

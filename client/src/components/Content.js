@@ -26,7 +26,7 @@ export class Content extends Component {
       isLoading: true
     });
     axios
-      .get("http://localhost:4000/api/v1/posts")
+      .get("http://10.0.0.20:4000/api/v1/posts")
       .then(res => {
         this.setState({
           data: res.data.data.posts.reverse(),
@@ -39,14 +39,14 @@ export class Content extends Component {
   }
 
   delete(id) {
-    axios.delete(`http://localhost:4000/api/v1/posts/${id}`).then(() => {
+    axios.delete(`http://10.0.0.20:4000/api/v1/posts/${id}`).then(() => {
       this.getAll();
     });
   }
 
   likePost(id, likes) {
     axios
-      .patch(`http://localhost:4000/api/v1/posts/${id}`, { likes })
+      .patch(`http://10.0.0.20:4000/api/v1/posts/${id}`, { likes })
       .then(res => {
         this.setState({
           postLikes: res.data.data
@@ -84,9 +84,19 @@ export class Content extends Component {
               />
               <br />
               <p>{post.description}</p>
+              <span
+                style={{
+                  color: "green",
+                  float: "left",
+                  fontSize: ".7em",
+                  cursor: "pointer"
+                }}
+                onClick={() => this.delete(post._id)}
+              >
+                del
+              </span>
               <button
                 className="check"
-                // onClick={() => this.delete(post._id)}
                 onClick={() => this.likePost(post._id, post.likes)}
               ></button>
               {post.likes < 1 ? "" : post.likes}

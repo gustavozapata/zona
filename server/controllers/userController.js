@@ -109,7 +109,3 @@ exports.checkLogin = async (req, res) => {
     res.json({ logged: false });
   }
 };
-
-exports.isLogged = (req, res) => {
-  res.send("isLogged? set a session in cookies?");
-};

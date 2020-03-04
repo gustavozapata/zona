@@ -9,10 +9,7 @@ router
 
 router.route("/top-5-users").get(controller.usersAlias, controller.getAllUsers);
 
-router
-  .route("/login")
-  .get(controller.isLogged)
-  .post(controller.checkLogin);
+router.route("/login").post(controller.checkLogin);
 
 router
   .route("/:id")
