@@ -86,7 +86,7 @@ export class Content extends Component {
               />
               <br />
               <p>{post.description}</p>
-              <span
+              {/* <span
                 style={{
                   color: "green",
                   float: "left",
@@ -96,7 +96,7 @@ export class Content extends Component {
                 onClick={() => this.delete(post._id)}
               >
                 del
-              </span>
+              </span> */}
               <button
                 className="check"
                 onClick={() => this.likePost(post._id, post.likes)}
