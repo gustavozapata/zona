@@ -35,11 +35,15 @@ export default function NewPost(props) {
     formData.append("postImage", file[0]);
     try {
       await axios
-        .post("http://10.0.0.20:4000/api/v1/posts/images", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data"
+        .post(
+          "https://zona-server.herokuapp.com/api/v1/posts/images",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data"
+            }
           }
-        })
+        )
         .then(() => {
           post(e);
         });
@@ -58,7 +62,7 @@ export default function NewPost(props) {
       };
       try {
         await axios
-          .post("http://10.0.0.20:4000/api/v1/posts", {
+          .post("https://zona-server.herokuapp.com/api/v1/posts", {
             description,
             image: file[0].name,
             by: props.user,

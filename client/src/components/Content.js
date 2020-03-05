@@ -26,7 +26,7 @@ export class Content extends Component {
       isLoading: true
     });
     axios
-      .get("http://10.0.0.20:4000/api/v1/posts")
+      .get("https://zona-server.herokuapp.com/api/v1/posts")
       .then(res => {
         this.setState({
           data: res.data.data.posts.reverse(),
@@ -39,14 +39,16 @@ export class Content extends Component {
   }
 
   delete(id) {
-    axios.delete(`http://10.0.0.20:4000/api/v1/posts/${id}`).then(() => {
-      this.getAll();
-    });
+    axios
+      .delete(`https://zona-server.herokuapp.com/api/v1/posts/${id}`)
+      .then(() => {
+        this.getAll();
+      });
   }
 
   likePost(id, likes) {
     axios
-      .patch(`http://10.0.0.20:4000/api/v1/posts/${id}`, { likes })
+      .patch(`https://zona-server.herokuapp.com/api/v1/posts/${id}`, { likes })
       .then(res => {
         this.setState({
           postLikes: res.data.data

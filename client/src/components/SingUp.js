@@ -14,7 +14,11 @@ export default function SingUp(props) {
     e.preventDefault();
 
     axios
-      .post("http://10.0.0.20:4000/api/v1/users", { name, email, password })
+      .post("https://zona-server.herokuapp.com/api/v1/users", {
+        name,
+        email,
+        password
+      })
       .then(res => {
         props.signUp();
       })

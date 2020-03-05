@@ -48,7 +48,10 @@ function App() {
 
   const checkLogin = (email, password) => {
     axios
-      .post("http://10.0.0.20:4000/api/v1/users/login", { email, password })
+      .post("https://zona-server.herokuapp.com/api/v1/users/login", {
+        email,
+        password
+      })
       .then(res => {
         if (res.data.logged) {
           sessionStorage.setItem("isLogged", true);
@@ -85,7 +88,7 @@ function App() {
 
   //USING MY (GZ) NPM PACKAGE
   const gzUI = async () => {
-    await fetch("http://10.0.0.20:4000/api/v1/posts/stats")
+    await fetch("https://zona-server.herokuapp.com/api/v1/posts/stats")
       .then(res => res.json())
       .then(res => console.log(res));
   };
