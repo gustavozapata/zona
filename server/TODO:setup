@@ -1,0 +1,5 @@
+1. follow the steps in OneNote
+2. similar to the ones in 'zona-server-heroku'
+
+
+git push heroku master - push to heroku and deploys automatically
