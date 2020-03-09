@@ -24,5 +24,5 @@ app.use(express.json()); //allows us to access the body of the request
 //ROUTES - MOUNTING THE ROUTERS
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/posts", postRouter);
-
+// mensaje para git testing
 module.exports = app;
