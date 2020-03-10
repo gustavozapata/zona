@@ -15,7 +15,7 @@ echo "\033[1;32mProject (GitHub) repo done \033[0m"
 cd ../../server && addncommit
 echo "\033[1;32mServer (Heroku) repo done \033[0m"
 
-echo "Pushing and deploying app..."
+echo "\033[1;32Pushing and deploying app...\033[0m"
 
 #project (GitHub)
 git push
