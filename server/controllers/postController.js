@@ -121,7 +121,7 @@ exports.deletePost = async (req, res) => {
 exports.testEndPoint = (req, res) => {
   res.status(200).json({
     status: "success",
-    message: "probando the end-point: /api/v1/posts/test"
+    message: "vamos the end-point: /api/v1/posts/test"
   });
 };
 

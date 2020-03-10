@@ -15,7 +15,7 @@ rm -rf !(.git) #delete all folders but .git
 # rm -r static #delete static folder
 cd .. #go to client
 cp -a ./build/. ./deploy/ #copy all files from build to deploy
-cd deploy && git push cpanel
+cd deploy && git push
 echo "\033[1;32mClient (cPanel) repo done \033[0m"
 # "homepage": "https://zona.gustavozapata.me",
 # "predeploy": "npm run build",

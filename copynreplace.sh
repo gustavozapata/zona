@@ -13,7 +13,6 @@ cd client/deploy
 # find ./myfolder -mindepth 1 -type d ! -regex '^./myfolder/test2\(/.*\)?'
 rm -rf !(.git)
 # find ./myfolder -depth -mindepth 1 -maxdepth 1 -type d ! -regex '^./myfolder/test2\(/.*\)?'
-# find . ! -name '.git' ! -name '.gitignore' ! -name '.cpanel.yml' -type f -delete #delete all but these
 # rm -r static #delete static folder
 cd ..
 # cp -a ./build/. ./deploy/
