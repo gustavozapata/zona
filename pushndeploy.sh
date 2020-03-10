@@ -9,8 +9,10 @@ echo "\033[1;32mProject (GitHub) repo done \033[0m"
 #client (cPanel)
 cd client && npm run build
 cd deploy
-find . ! -name '.git' ! -name '.gitignore' ! -name '.cpanel.yml' -type f -exec rm -f {} + #delete all but these files
-rm -r static #delete static folder
+shopt -s extglob
+# find . ! -name '.git' ! -name '.gitignore' ! -name '.cpanel.yml' -type f -exec rm -f {} + #delete all but these files
+rm -rf !(.git) #delete all folders but .git
+# rm -r static #delete static folder
 cd .. #go to client
 cp -a ./build/. ./deploy/ #copy all files from build to deploy
 cd deploy && git push cpanel
