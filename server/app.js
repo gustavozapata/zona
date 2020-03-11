@@ -17,7 +17,7 @@ if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev")); //logs all the end-point calls
 }
 app.use(cors()); //allow-access: *
-app.use(fileUpload()); //to upload files
+// app.use(fileUpload()); //to upload files
 app.use(express.static("public")); //serves files (html, css, js) in the "public" folder
 app.use(express.json()); //allows us to access the body of the request
 

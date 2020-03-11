@@ -36,7 +36,8 @@ export default function NewPost(props) {
     try {
       await axios
         .post(
-          "https://zona-server.herokuapp.com/api/v1/posts/images",
+          // "https://zona-server.herokuapp.com/api/v1/posts/images",
+          "https://zona-server.herokuapp.com/api/v1/posts/saveImage",
           formData,
           {
             headers: {

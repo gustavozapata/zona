@@ -2,8 +2,45 @@ const Post = require("../models/postModel");
 const dotenv = require("dotenv");
 const gzUI = require("gz-ui-react");
 const path = require("path");
+const multer = require("multer");
 
 dotenv.config();
+
+//upload image
+const multerStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "public/images/posts");
+  },
+  filename: (req, file, cb) => {
+    const ext = file.mimetype.split("/")[1];
+    // cb(null, `post-${Date.now()}.${ext}`);
+    cb(null, file.originalname);
+  }
+});
+
+const multerFilter = (req, file, cb) => {
+  //filters the files - only accepts images
+  if (file.mimetype.startsWith("image")) {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
+
+const upload = multer({
+  storage: multerStorage,
+  fileFilter: multerFilter
+});
+
+//saveImage version 2
+exports.uploadPostImage = upload.single("postImage");
+
+exports.saveImage = (req, res) => {
+  res.status(200).json({
+    status: "success",
+    message: "post image uploaded"
+  });
+};
 
 exports.checkId = (req, res, next, val) => {
   console.log(`the id is: ${val}`);
@@ -52,8 +89,8 @@ exports.addPost = async (req, res) => {
     });
   }
 };
-//saveImage
-exports.saveImage = async (req, res) => {
+//saveImage version 1
+exports.saveImageClient = async (req, res) => {
   try {
     const file = req.files.postImage;
     const pathSave = path.join(
