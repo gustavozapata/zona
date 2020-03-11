@@ -12,8 +12,6 @@ const multerStorage = multer.diskStorage({
     cb(null, "public/images/posts");
   },
   filename: (req, file, cb) => {
-    const ext = file.mimetype.split("/")[1];
-    // cb(null, `post-${Date.now()}.${ext}`);
     cb(null, file.originalname);
   }
 });
@@ -23,7 +21,7 @@ const multerFilter = (req, file, cb) => {
   if (file.mimetype.startsWith("image")) {
     cb(null, true);
   } else {
-    cb(null, false);
+    cb(new Error("only images please"), false);
   }
 };
 
@@ -36,6 +34,7 @@ const upload = multer({
 exports.uploadPostImage = upload.single("postImage");
 
 exports.saveImage = (req, res) => {
+  console.log(req);
   res.status(200).json({
     status: "success",
     message: "post image uploaded"

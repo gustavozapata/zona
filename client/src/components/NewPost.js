@@ -1,6 +1,8 @@
 import React, { useState, useRef } from "react";
 import axios from "axios";
 
+let fileName = "";
+
 export default function NewPost(props) {
   const [file, setFile] = useState([]);
   const [isImageChosen, setIsImageChosen] = useState(false);
@@ -31,12 +33,14 @@ export default function NewPost(props) {
   const saveImage = async e => {
     e.persist();
     e.preventDefault();
+    fileName = `post-${Date.now()}.${file[0].type.split("/")[1]}`;
     const formData = new FormData();
-    formData.append("postImage", file[0]);
+    formData.append("postImage", file[0], fileName);
+    console.log(file[0]);
+    console.log(formData);
     try {
       await axios
         .post(
-          // "https://zona-server.herokuapp.com/api/v1/posts/images",
           "https://zona-server.herokuapp.com/api/v1/posts/saveImage",
           formData,
           {
@@ -65,7 +69,8 @@ export default function NewPost(props) {
         await axios
           .post("https://zona-server.herokuapp.com/api/v1/posts", {
             description,
-            image: file[0].name,
+            // image: file[0].name,
+            image: fileName,
             by: props.user,
             likes: 0,
             location,
