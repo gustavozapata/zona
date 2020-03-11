@@ -42,13 +42,21 @@ export default function Login(props) {
           )}
         </div>
         <button
-          className="button"
+          className="button btn-loading"
           onClick={e => {
             e.preventDefault();
             props.login(email, password);
           }}
         >
-          Log in
+          {props.isLoading ? (
+            <img
+              id="spinner"
+              src={require("../images/spinner.gif")}
+              alt="Loading"
+            />
+          ) : (
+            "Log in"
+          )}
         </button>
       </form>
     </div>

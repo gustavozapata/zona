@@ -298,6 +298,16 @@ header h1 {
   font-size: 1.1em;
   font-weight: 800;
 }
+#spinner {
+  width: 35px;
+}
+.btn-loading {
+  padding: 2px 0 0 0;
+  height: 40px;
+}
+.btn-loading:hover {
+  background-color: white;
+}
 
 /* NEWPOST */
 .NewPost {
@@ -415,6 +425,19 @@ header h1 {
   padding: 5px;
   font-size: 1em;
 }
+.user-name {
+  position: absolute;
+  top: 30px;
+  right: 40px;
+  font-weight: bold;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.user-name-menu {
+  position: absolute;
+  top: -8px;
+  right: 180px;
+}
 
 @media only screen and (max-width: 600px) {
   .post-container {
@@ -427,5 +450,27 @@ header h1 {
   }
   .post-pic {
     width: 99%;
+  }
+}
+
+@media only screen and (max-width: 400px) {
+  .Button button {
+    left: -25px;
+  }
+  .btn-menu {
+    top: 80px;
+    left: -20px;
+    width: 140px;
+  }
+  .invite-code input {
+    width: 25px;
+    height: 40px;
+    font-size: 1.5em;
+  }
+  .user-name {
+    right: 15px;
+  }
+  .user-name-menu {
+    right: 130px;
   }
 }

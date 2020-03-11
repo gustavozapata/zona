@@ -1,3 +1,4 @@
 LICENSE
 README.md
-deploy.log
+pipeline.log
+.DS_Store

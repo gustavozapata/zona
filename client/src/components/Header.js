@@ -5,17 +5,6 @@ import { userMenu } from "../content/userMenu";
 export default function Header(props) {
   const [showMenu, setShowMenu] = useState(false);
 
-  const styles = {
-    userName: {
-      position: "absolute",
-      top: "30px",
-      right: "40px",
-      fontWeight: "bold",
-      textDecoration: "underline",
-      cursor: "pointer"
-    }
-  };
-
   const showOrHide = () => {
     return {
       display: showMenu ? "block" : "none"
@@ -60,12 +49,10 @@ export default function Header(props) {
         >
           Zona
         </h1>
-        <p style={styles.userName} onClick={() => setShowMenu(!showMenu)}>
+        <p className="user-name" onClick={() => setShowMenu(!showMenu)}>
           {props.user}
         </p>
-        <div style={{ position: "absolute", top: "-8px", right: "180px" }}>
-          {renderMenu()}
-        </div>
+        <div className="user-name-menu">{renderMenu()}</div>
         <Button label="New" show={props.user} showNewPost={props.showNewPost} />
       </header>
     </div>

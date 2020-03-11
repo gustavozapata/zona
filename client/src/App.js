@@ -17,6 +17,7 @@ function App() {
   const [wrongLogin, setWrongLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
   const [showNewPost, setShowNewPost] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [code, setCode] = useState("");
   const [user, setUser] = useState("");
 
@@ -47,6 +48,7 @@ function App() {
   };
 
   const checkLogin = (email, password) => {
+    setIsLoading(true);
     axios
       .post("https://zona-server.herokuapp.com/api/v1/users/login", {
         email,
@@ -59,8 +61,10 @@ function App() {
           setShowLogin(false);
           setIsLogged(sessionStorage.getItem("isLogged"));
           setUser(sessionStorage.getItem("user"));
+          setIsLoading(false);
         } else {
           setWrongLogin(true);
+          setIsLoading(false);
         }
       });
   };
@@ -112,7 +116,11 @@ function App() {
                 Zona
               </h1>
               {showLogin ? (
-                <Login login={checkLogin} wrongLogin={wrongLogin} />
+                <Login
+                  login={checkLogin}
+                  wrongLogin={wrongLogin}
+                  isLoading={isLoading}
+                />
               ) : (
                 <div className="invite-code">
                   <form action="">
@@ -126,6 +134,7 @@ function App() {
                     Enter
                   </button>
                   <p className="have-account">
+                    <br />
                     Have an account?{" "}
                     <span onClick={() => setShowLogin(true)}>Log in</span>
                   </p>
