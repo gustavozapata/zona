@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
 const dotenv = require("dotenv");
-const fileUpload = require("express-fileupload");
+// const fileUpload = require("express-fileupload");
 
 const postRouter = require("./routes/postRoutes");
 const userRouter = require("./routes/userRoutes");
