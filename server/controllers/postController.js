@@ -34,7 +34,6 @@ const upload = multer({
 exports.uploadPostImage = upload.single("postImage");
 
 exports.saveImage = (req, res) => {
-  console.log(req);
   res.status(200).json({
     status: "success",
     message: "post image uploaded"
