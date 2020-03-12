@@ -69,7 +69,6 @@ export default function NewPost(props) {
         await axios
           .post("https://zona-server.herokuapp.com/api/v1/posts", {
             description,
-            // image: file[0].name,
             image: fileName,
             by: props.user,
             likes: 0,
