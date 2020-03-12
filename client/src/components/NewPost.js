@@ -40,7 +40,8 @@ export default function NewPost(props) {
       await axios
         .post("https://server.gustavozapata.me/zona/storage", formData, {
           headers: {
-            "Content-Type": "multipart/form-data"
+            "Content-Type": "multipart/form-data",
+            "Access-Control-Allow-Origin": "https://zona.gustavozapata.me"
           }
         })
         .then(() => {
