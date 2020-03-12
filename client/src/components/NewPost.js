@@ -36,8 +36,6 @@ export default function NewPost(props) {
     fileName = `post-${Date.now()}.${file[0].type.split("/")[1]}`;
     const formData = new FormData();
     formData.append("postImage", file[0], fileName);
-    console.log(file[0]);
-    console.log(formData);
     try {
       await axios
         .post(
