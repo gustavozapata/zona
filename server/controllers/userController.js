@@ -1,5 +1,8 @@
+const dotenv = require("dotenv");
 const User = require("../models/userModel");
 const APIFeatures = require("../utils/apiFeatures");
+
+dotenv.config();
 
 exports.usersAlias = (req, res, next) => {
   req.query.sort = "name";
@@ -11,7 +14,6 @@ exports.usersAlias = (req, res, next) => {
 //ZONA
 exports.createUser = async (req, res) => {
   try {
-    console.log(req.body);
     const newUser = await User.create(req.body);
     res.status(200).json({
       status: "success",
@@ -23,6 +25,15 @@ exports.createUser = async (req, res) => {
     res.status(400).json({
       status: "fail",
       message: "Invalid data sent"
+    });
+  }
+};
+
+exports.invitationCode = async (req, res) => {
+  if (req.body.code === process.env.INVITATION_CODE) {
+    res.status(200).json({
+      status: "success",
+      data: true
     });
   }
 };

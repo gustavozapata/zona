@@ -29,10 +29,16 @@ function App() {
   }, []);
 
   const checkCode = () => {
-    if (code === "1234") {
-      setShowSignup(true);
-      theCode = "";
-    }
+    axios
+      .post("https://zona-server.herokuapp.com/api/v1/users/invitation", {
+        code
+      })
+      .then(res => {
+        if (res.data.data) {
+          setShowSignup(true);
+          theCode = "";
+        }
+      });
   };
 
   const goNext = e => {
