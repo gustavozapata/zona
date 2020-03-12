@@ -6,9 +6,9 @@ router.param("id", controller.checkId); //will execute whenever a param 'id' is 
 
 router.route("/stats").get(controller.stats);
 // router.route("/images").post(controller.saveImageClient);
-router
-  .route("/saveImage")
-  .post(controller.uploadPostImage, controller.saveImage);
+// router
+//   .route("/saveImage")
+//   .post(controller.uploadPostImage, controller.saveImage);
 router.route("/test").get(controller.testEndPoint);
 
 router

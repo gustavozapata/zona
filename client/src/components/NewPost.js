@@ -38,32 +38,14 @@ export default function NewPost(props) {
     formData.append("postImage", file[0], fileName);
     try {
       await axios
-        .post(
-          "https://zona-server.herokuapp.com/api/v1/posts/saveImage",
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data"
-            }
+        .post("https://server.gustavozapata.me/zona/storage", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data"
           }
-        )
+        })
         .then(() => {
           post(e);
-          storageCloud(e, formData);
         });
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const storageCloud = async (e, formData) => {
-    e.preventDefault();
-    try {
-      await axios.post(
-        "https://server.gustavozapata.me/zona/storage",
-        formData,
-        { headers: { "Content-Type": "multipart/form-data" } }
-      );
     } catch (err) {
       console.log(err);
     }

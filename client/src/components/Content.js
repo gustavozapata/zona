@@ -81,7 +81,7 @@ export class Content extends Component {
               </div>
               <img
                 className="post-pic"
-                src={`https://zona-server.herokuapp.com/images/posts/${post.image}`}
+                src={`https://server.gustavozapata.me/zona/public/${post.image}`}
                 alt={post.location}
               />
               <br />
