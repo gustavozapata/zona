@@ -1,5 +1,9 @@
-LICENSE
-README.md
-storage
+#GZ
+/storage
+/data
+
 pipeline.log
 .DS_Store
+
+# LICENSE
+# README.md

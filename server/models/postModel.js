@@ -21,9 +21,13 @@ const postSchema = new Schema(
       type: String,
       default: Date.now()
     },
-    likes: {
+    love: {
       type: Number
     },
+    funny: {
+      type: Number
+    },
+    comments: [Object],
     location: {
       type: String,
       required: true

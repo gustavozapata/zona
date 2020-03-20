@@ -35,7 +35,7 @@ export class Feed extends Component {
             addPost={this.addPost}
           />
         )}
-        <Content postAdded={this.state.newPostAdded} />
+        <Content postAdded={this.state.newPostAdded} user={this.props.user} />
         {/* <SideBar /> */}
       </div>
     );

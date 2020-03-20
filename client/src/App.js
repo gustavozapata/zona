@@ -24,8 +24,8 @@ function App() {
   const enter = useRef();
 
   useEffect(() => {
-    setIsLogged(sessionStorage.getItem("isLogged"));
-    setUser(sessionStorage.getItem("user"));
+    setIsLogged(localStorage.getItem("isLogged"));
+    setUser(localStorage.getItem("user"));
   }, []);
 
   const checkCode = () => {
@@ -62,11 +62,11 @@ function App() {
       })
       .then(res => {
         if (res.data.logged) {
-          sessionStorage.setItem("isLogged", true);
-          sessionStorage.setItem("user", res.data.user);
+          localStorage.setItem("isLogged", true);
+          localStorage.setItem("user", res.data.user);
           setShowLogin(false);
-          setIsLogged(sessionStorage.getItem("isLogged"));
-          setUser(sessionStorage.getItem("user"));
+          setIsLogged(localStorage.getItem("isLogged"));
+          setUser(localStorage.getItem("user"));
           setIsLoading(false);
         } else {
           setWrongLogin(true);
@@ -82,8 +82,8 @@ function App() {
 
   const logout = () => {
     gzUI();
-    sessionStorage.setItem("user", "");
-    sessionStorage.setItem("isLogged", "");
+    localStorage.setItem("user", "");
+    localStorage.setItem("isLogged", "");
     setIsLogged(false);
     setUser("");
   };

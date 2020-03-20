@@ -8,6 +8,7 @@ export default function NewPost(props) {
   const [isImageChosen, setIsImageChosen] = useState(false);
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const fileRef = useRef();
 
@@ -33,6 +34,7 @@ export default function NewPost(props) {
   const saveImage = async e => {
     e.persist();
     e.preventDefault();
+    setIsLoading(true);
     fileName = `post-${Date.now()}.${file[0].type.split("/")[1]}`;
     const formData = new FormData();
     formData.append("postImage", file[0], fileName);
@@ -44,6 +46,7 @@ export default function NewPost(props) {
           }
         })
         .then(() => {
+          setIsLoading(false);
           post(e);
         });
     } catch (err) {
@@ -167,10 +170,18 @@ export default function NewPost(props) {
           </button>
           <button
             className="post-btn"
-            onClick={saveImage}
             hidden={isImageChosen ? false : true}
+            onClick={saveImage}
           >
-            Post
+            {isLoading ? (
+              <img
+                id="spinner"
+                src={require("../images/spinner.gif")}
+                alt="Loading"
+              />
+            ) : (
+              "Post"
+            )}
           </button>
         </form>
       </div>

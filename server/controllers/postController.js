@@ -54,7 +54,7 @@ exports.checkBody = (req, res, next) => {
   next();
 };
 
-//getAll
+//get all posts
 exports.getPosts = async (req, res) => {
   try {
     const posts = await Post.find();
@@ -71,7 +71,7 @@ exports.getPosts = async (req, res) => {
   }
 };
 
-//insertOne
+//add post
 exports.addPost = async (req, res) => {
   try {
     const newPost = await Post.create(req.body);
@@ -114,16 +114,13 @@ exports.saveImageClient = async (req, res) => {
     });
   }
 };
-//likePost
+//like post
 exports.likePost = async (req, res) => {
   try {
     let likes = req.body.likes + 1;
-    await Post.updateOne(
-      { _id: req.params.id },
-      {
-        likes
-      }
-    );
+    const reaction = req.body.reaction === "love" ? "love" : "funny";
+    console.log("reaction: ", reaction, likes);
+    await Post.updateOne({ _id: req.params.id }, { [reaction]: likes });
     res.status(200).json({
       status: "success",
       data: likes
@@ -135,8 +132,28 @@ exports.likePost = async (req, res) => {
     });
   }
 };
+//post comment
+exports.postComment = async (req, res) => {
+  try {
+    await Post.updateOne(
+      { _id: req.params.id },
+      {
+        $push: { comments: { user: req.body.user, comment: req.body.comment } }
+      }
+    );
+    res.status(200).json({
+      status: "success",
+      data: "ok"
+    });
+  } catch (err) {
+    res.status(404).json({
+      status: "fail",
+      message: err
+    });
+  }
+};
 
-//deleteOne
+//delete a post
 exports.deletePost = async (req, res) => {
   try {
     await Post.findByIdAndDelete(req.params.id);

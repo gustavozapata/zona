@@ -6,8 +6,9 @@ export class Content extends Component {
     super(props);
     this.state = {
       isLoading: false,
-      data: [],
-      postLikes: []
+      comment: "",
+      commentStyle: "",
+      data: []
     };
   }
 
@@ -39,6 +40,17 @@ export class Content extends Component {
   }
 
   delete(id) {
+    // <span
+    //  style={{
+    //  color: "green",
+    //  float: "left",
+    //  fontSize: ".7em",
+    //  cursor: "pointer"
+    // }}
+    // onClick={() => this.delete(post._id)}
+    // >
+    //   del
+    // </span>
     axios
       .delete(`https://zona-server.herokuapp.com/api/v1/posts/${id}`)
       .then(() => {
@@ -46,12 +58,30 @@ export class Content extends Component {
       });
   }
 
-  likePost(id, likes) {
+  likePost(id, likes, reaction) {
     axios
-      .patch(`https://zona-server.herokuapp.com/api/v1/posts/${id}`, { likes })
+      .patch(`https://zona-server.herokuapp.com/api/v1/posts/likes/${id}`, {
+        reaction,
+        likes
+      })
+      .then(res => {
+        if (reaction === "love") {
+          //TODO: MAKE THIS BETTER FOR SMOOTH UPDATE
+        }
+        this.getAll(); //TODO: MAKE THIS BETTER FOR SMOOTH UPDATE
+      })
+      .catch(err => console.log("my error: ", err));
+  }
+
+  postComment(id) {
+    axios
+      .patch(`http://zona-server.herokuapp.com/api/v1/posts/comments/${id}`, {
+        user: this.props.user,
+        comment: this.state.comment
+      })
       .then(res => {
         this.setState({
-          postLikes: res.data.data
+          comment: ""
         });
         this.getAll();
       })
@@ -85,23 +115,75 @@ export class Content extends Component {
                 alt={post.location}
               />
               <br />
-              <p>{post.description}</p>
-              {/* <span
-                style={{
-                  color: "green",
-                  float: "left",
-                  fontSize: ".7em",
-                  cursor: "pointer"
-                }}
-                onClick={() => this.delete(post._id)}
-              >
-                del
-              </span> */}
-              <button
-                className="check"
-                onClick={() => this.likePost(post._id, post.likes)}
-              ></button>
-              {post.likes < 1 ? "" : post.likes}
+              <div className="reactions">
+                <img
+                  onClick={() => this.likePost(post._id, post.love, "love")}
+                  src={require(`../images/icons/heart_${
+                    post.love < 1 ? "e" : "f"
+                  }.png`)}
+                  alt="Love Heart icon"
+                />
+                <span>{post.love < 1 ? "" : post.love}</span>
+                <img
+                  onClick={() => this.likePost(post._id, post.funny, "funny")}
+                  src={require(`../images/icons/lol_${
+                    post.funny < 1 ? "e" : "f"
+                  }.png`)}
+                  alt="Funny Lol icon"
+                />
+                <span>{post.funny < 1 ? "" : post.funny}</span>
+              </div>
+
+              {/* description */}
+              <p className="post-description">{post.description}</p>
+
+              {/* add comment */}
+              <div className="comments">
+                <div className="user-add-comment">
+                  <img
+                    src={require(`../images/users/${this.props.user.toLowerCase()}.png`)}
+                    alt={this.props.user}
+                  />
+                  <textarea
+                    value={this.state.comment}
+                    onChange={e => this.setState({ comment: e.target.value })}
+                    onFocus={() =>
+                      this.setState({
+                        commentStyle: "comment-active"
+                      })
+                    }
+                    onBlur={() =>
+                      this.setState({
+                        commentStyle: ""
+                      })
+                    }
+                    className={this.state.commentStyle}
+                    placeholder="Add a comment..."
+                  ></textarea>
+                  {this.state.comment && (
+                    <span
+                      onClick={() => this.postComment(post._id)}
+                      className="post-comment"
+                    >
+                      Post
+                      <img
+                        src={require("../images/icons/post-comment.png")}
+                        alt=""
+                      />
+                    </span>
+                  )}
+                  {/* comments */}
+                  {post.comments.map((el, i) => (
+                    <p key={i} className="user-comment">
+                      <img
+                        src={require(`../images/users/${el.user.toLowerCase()}.png`)}
+                        alt={el.user}
+                      />
+                      <span>{el.user}</span> {el.comment}
+                    </p>
+                  ))}
+                </div>
+              </div>
             </div>
           );
         })}
