@@ -6,11 +6,11 @@ export class Content extends Component {
     super(props);
     this.state = {
       isLoading: false,
-      comment: "",
-      commentStyle: "",
       data: []
     };
   }
+
+  add_comment = [];
 
   componentDidMount() {
     this.getAll();
@@ -73,16 +73,13 @@ export class Content extends Component {
       .catch(err => console.log("my error: ", err));
   }
 
-  postComment(id) {
+  postComment(id, comment) {
     axios
       .patch(`https://zona-server.herokuapp.com/api/v1/posts/comments/${id}`, {
         user: this.props.user,
-        comment: this.state.comment
+        comment
       })
       .then(res => {
-        this.setState({
-          comment: ""
-        });
         this.getAll();
       })
       .catch(err => console.log("my error: ", err));
@@ -145,25 +142,36 @@ export class Content extends Component {
                     alt={this.props.user}
                   />
                   <textarea
-                    value={this.state.comment}
-                    onChange={e => this.setState({ comment: e.target.value })}
-                    onFocus={() =>
+                    value={this.add_comment[i]}
+                    onChange={e => {
+                      this.add_comment[i] = e.target.value;
                       this.setState({
-                        commentStyle: "comment-active"
-                      })
-                    }
-                    onBlur={() =>
-                      this.setState({
-                        commentStyle: ""
-                      })
-                    }
-                    className={this.state.commentStyle}
+                        comment: e.target.value
+                      });
+                    }}
+                    onFocus={e => {
+                      e.target.className = "comment-active";
+                    }}
+                    onBlur={e => {
+                      if (this.add_comment[i] === "") {
+                        e.target.className = "";
+                      }
+                    }}
                     placeholder="Add a comment..."
                   ></textarea>
-                  {this.state.comment && (
+                  {this.add_comment && (
                     <span
-                      onClick={() => this.postComment(post._id)}
+                      onClick={() => {
+                        this.postComment(post._id, this.add_comment[i]);
+                        this.add_comment[i] = "";
+                      }}
                       className="post-comment"
+                      style={{
+                        visibility:
+                          this.add_comment[i] && this.add_comment[i].length > 0
+                            ? "visible"
+                            : "hidden"
+                      }}
                     >
                       Post
                       <img

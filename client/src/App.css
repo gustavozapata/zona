@@ -286,6 +286,9 @@ header h1 {
 .comments .comment-active {
   border-bottom: 1px solid rgb(151, 151, 151);
 }
+.comment-active + .post-comment {
+  visibility: visible;
+}
 .user-add-comment {
   margin-left: 4px;
 }
@@ -312,6 +315,7 @@ header h1 {
   margin-left: 5px;
 }
 .post-comment {
+  visibility: hidden;
   color: rgb(30, 122, 228);
   font-size: 0.9em;
   font-weight: 600;

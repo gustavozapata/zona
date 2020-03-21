@@ -32,7 +32,7 @@ export default function NewPost(props) {
   };
 
   const post = async e => {
-    setLoadingBar(25);
+    setLoadingBar(10);
     e.persist();
     e.preventDefault();
     if (isImageChosen) {
