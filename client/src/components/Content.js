@@ -75,7 +75,7 @@ export class Content extends Component {
 
   postComment(id) {
     axios
-      .patch(`http://zona-server.herokuapp.com/api/v1/posts/comments/${id}`, {
+      .patch(`https://zona-server.herokuapp.com/api/v1/posts/comments/${id}`, {
         user: this.props.user,
         comment: this.state.comment
       })
