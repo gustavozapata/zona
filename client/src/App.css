@@ -456,6 +456,13 @@ header h1 {
   background-color: rgb(30, 122, 228);
   color: white;
 }
+.post-loading {
+  padding: 2px 0 0 0;
+  height: 40px;
+}
+.post-loading:hover {
+  background-color: transparent;
+}
 #file-preview {
   max-width: 250px;
 }
@@ -513,7 +520,16 @@ header h1 {
   top: -8px;
   right: 180px;
 }
+#loading-bar {
+  position: relative;
+  width: 0%;
+  height: 10px;
+  bottom: 100px;
+  background-color: rgb(66, 151, 248);
+  transition: width 1s;
+}
 
+/* MEDIA QUERIES */
 @media only screen and (max-width: 600px) {
   .post-container {
     display: block;

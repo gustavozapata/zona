@@ -6,7 +6,11 @@ const postSchema = new Schema(
   {
     description: {
       type: String,
-      required: [true, "you must enter a title"]
+      required: [true, "you must enter a description"]
+    },
+    location: {
+      type: String,
+      required: [true, "you must enter a location"]
     },
     image: {
       type: String,
@@ -22,16 +26,14 @@ const postSchema = new Schema(
       default: Date.now()
     },
     love: {
-      type: Number
+      type: Number,
+      default: 0
     },
     funny: {
-      type: Number
+      type: Number,
+      default: 0
     },
-    comments: [Object],
-    location: {
-      type: String,
-      required: true
-    }
+    comments: [Object]
   },
   {
     toJSON: { virtuals: true }

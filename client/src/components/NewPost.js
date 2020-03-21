@@ -8,7 +8,7 @@ export default function NewPost(props) {
   const [isImageChosen, setIsImageChosen] = useState(false);
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [loadingBar, setLoadingBar] = useState(0);
 
   const fileRef = useRef();
 
@@ -31,11 +31,39 @@ export default function NewPost(props) {
     }
   };
 
-  const saveImage = async e => {
+  const post = async e => {
+    setLoadingBar(25);
     e.persist();
     e.preventDefault();
-    setIsLoading(true);
-    fileName = `post-${Date.now()}.${file[0].type.split("/")[1]}`;
+    if (isImageChosen) {
+      const options = {
+        year: "numeric",
+        month: "short",
+        day: "numeric"
+      };
+      fileName = `post-${Date.now()}.${file[0].type.split("/")[1]}`;
+      try {
+        await axios
+          .post("https://zona-server.herokuapp.com/api/v1/posts", {
+            description,
+            image: fileName,
+            by: props.user,
+            location,
+            date: new Date().toLocaleDateString("en-US", options)
+          })
+          .then(() => {
+            setLoadingBar(50);
+            saveImage(e);
+          });
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
+
+  const saveImage = async e => {
+    setLoadingBar(100);
+    e.preventDefault();
     const formData = new FormData();
     formData.append("postImage", file[0], fileName);
     try {
@@ -46,41 +74,13 @@ export default function NewPost(props) {
           }
         })
         .then(() => {
-          setIsLoading(false);
-          post(e);
+          props.closeNewPost();
+          setTimeout(() => {
+            props.addPost();
+          }, 1000);
         });
     } catch (err) {
       console.log(err);
-    }
-  };
-
-  const post = async e => {
-    e.preventDefault();
-    if (isImageChosen) {
-      const options = {
-        year: "numeric",
-        month: "short",
-        day: "numeric"
-      };
-      try {
-        await axios
-          .post("https://zona-server.herokuapp.com/api/v1/posts", {
-            description,
-            image: fileName,
-            by: props.user,
-            likes: 0,
-            location,
-            date: new Date().toLocaleDateString("en-US", options)
-          })
-          .then(() => {
-            props.closeNewPost();
-            setTimeout(() => {
-              props.addPost();
-            }, 1000);
-          });
-      } catch (err) {
-        console.log(err);
-      }
     }
   };
 
@@ -96,7 +96,7 @@ export default function NewPost(props) {
           <p>X</p>
         </span>
         <h2>New Post</h2>
-        <form action="">
+        <form action="" onSubmit={post}>
           <div className="choose-image">
             {!isImageChosen && <h3>Choose an image</h3>}
             {isImageChosen ? (
@@ -168,22 +168,13 @@ export default function NewPost(props) {
           >
             Back
           </button>
-          <button
-            className="post-btn"
-            hidden={isImageChosen ? false : true}
-            onClick={saveImage}
-          >
-            {isLoading ? (
-              <img
-                id="spinner"
-                src={require("../images/spinner.gif")}
-                alt="Loading"
-              />
-            ) : (
-              "Post"
-            )}
+          <button className="post-btn" hidden={isImageChosen ? false : true}>
+            Post
           </button>
         </form>
+        {loadingBar > 0 && (
+          <div id="loading-bar" style={{ width: `${loadingBar}%` }}></div>
+        )}
       </div>
     </div>
   );
