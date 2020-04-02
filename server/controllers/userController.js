@@ -1,5 +1,6 @@
 const AppError = require("../utils/appError");
 const catchAsync = require("../utils/catchAsync");
+const APIFeatures = require("../utils/apiFeatures");
 const dotenv = require("dotenv");
 const User = require("../models/userModel");
 
@@ -37,7 +38,10 @@ exports.invitationCode = catchAsync(async (req, res, next) => {
 
 //FIXME: (GET ALL USERS?)
 exports.getAllUsers = catchAsync(async (req, res, next) => {
-  const users = await User.find();
+  const features = new APIFeatures(User.find(), req.query).limitFields();
+  features.query.select(["-_id", "-email"]);
+  const users = await features.query;
+
   res.status(200).json({
     status: "success",
     results: users.length,
