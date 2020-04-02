@@ -1,43 +1,41 @@
 const Post = require("../models/postModel");
+const APIFeatures = require("../utils/apiFeatures");
+const catchAsync = require("../utils/catchAsync");
 const dotenv = require("dotenv");
 const gzUI = require("gz-ui-react");
-const path = require("path");
 const multer = require("multer");
 
 dotenv.config();
 
-//upload image
-const multerStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "public/images/posts");
-  },
-  filename: (req, file, cb) => {
-    cb(null, file.originalname);
-  }
-});
-
-const multerFilter = (req, file, cb) => {
-  //filters the files - only accepts images
-  if (file.mimetype.startsWith("image")) {
-    cb(null, true);
-  } else {
-    cb(new Error("only images please"), false);
-  }
-};
-
-const upload = multer({
-  storage: multerStorage,
-  fileFilter: multerFilter
-});
-
-//saveImage version 2
-exports.uploadPostImage = upload.single("postImage");
-
-exports.saveImage = (req, res) => {
-  res.status(200).json({
-    status: "success",
-    message: "post image uploaded"
+//FIXME: upload image version 2
+const uploadImageV2 = () => {
+  const multerStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, "public/images/posts");
+    },
+    filename: (req, file, cb) => {
+      cb(null, file.originalname);
+    }
   });
+  const multerFilter = (req, file, cb) => {
+    //filters the files - only accepts images
+    if (file.mimetype.startsWith("image")) {
+      cb(null, true);
+    } else {
+      cb(new Error("only images please"), false);
+    }
+  };
+  const upload = multer({
+    storage: multerStorage,
+    fileFilter: multerFilter
+  });
+  exports.uploadPostImage = upload.single("postImage");
+  exports.saveImage = (req, res) => {
+    res.status(200).json({
+      status: "success",
+      message: "post image uploaded"
+    });
+  };
 };
 
 exports.checkId = (req, res, next, val) => {
@@ -55,158 +53,109 @@ exports.checkBody = (req, res, next) => {
 };
 
 //get all posts
-exports.getPosts = async (req, res) => {
-  try {
-    const posts = await Post.find();
-    res.status(200).json({
-      status: "success",
-      results: posts.length,
-      data: { posts }
-    });
-  } catch (err) {
-    res.status(404).json({
-      status: "fail",
-      message: err
-    });
-  }
-};
+exports.getPosts = catchAsync(async (req, res, next) => {
+  const features = new APIFeatures(Post.find(), req.query)
+    .filter() //posts?filter=description,by
+    .sort() //posts?sort=date
+    .limitFields() //posts?limit=4 (shows only 4 results)
+    .paginate(); //posts?page=1&limit=3 (3 results per page)
+  const posts = await features.query;
+
+  res.status(200).json({
+    status: "success",
+    results: posts.length,
+    data: { posts }
+  });
+  // catch (err) {
+  // res.status(404)
+});
 
 //add post
-exports.addPost = async (req, res) => {
-  try {
-    const newPost = await Post.create(req.body);
-    res.status(200).json({
-      status: "success",
-      data: { post: newPost }
-    });
-    console.log("post added: ", newPost);
-  } catch (err) {
-    res.status(404).json({
-      status: "fail",
-      message: err
-    });
-  }
-};
-//saveImage version 1
-exports.saveImageClient = async (req, res) => {
-  try {
-    const file = req.files.postImage;
-    const pathSave = path.join(
-      __dirname,
-      `../../client/src/images/posts/${file.name}`
-    );
-    file.mv(pathSave, err => {
-      if (err) {
-        return res.status(500).json({
-          status: "fail",
-          message: err
-        });
-      }
-    });
-    res.status(200).json({
-      status: "success",
-      data: file.name
-    });
-  } catch (err) {
-    res.status(404).json({
-      status: "fail",
-      message: err
-    });
-  }
-};
+exports.addPost = catchAsync(async (req, res, next) => {
+  console.log("addPost");
+  const newPost = await Post.create(req.body);
+  res.status(200).json({
+    status: "success",
+    data: { post: newPost }
+  });
+  console.log("post added: ", newPost);
+  // catch (err) {
+  // res.status(404)
+});
+
 //like post
-exports.likePost = async (req, res) => {
-  try {
-    let likes = req.body.likes + 1;
-    const reaction = req.body.reaction === "love" ? "love" : "funny";
-    console.log("reaction: ", reaction, likes);
-    await Post.updateOne({ _id: req.params.id }, { [reaction]: likes });
-    res.status(200).json({
-      status: "success",
-      data: likes
-    });
-  } catch (err) {
-    res.status(404).json({
-      status: "fail",
-      message: err
-    });
-  }
-};
+exports.likePost = catchAsync(async (req, res, next) => {
+  let likes = req.body.likes + 1;
+  const reaction = req.body.reaction === "love" ? "love" : "funny";
+  console.log("reaction: ", reaction, likes);
+  await Post.updateOne({ _id: req.params.id }, { [reaction]: likes });
+  res.status(200).json({
+    status: "success",
+    data: likes
+  });
+  //  catch (err) {
+  //  res.status(404)
+});
 //post comment
-exports.postComment = async (req, res) => {
-  try {
-    await Post.updateOne(
-      { _id: req.params.id },
-      {
-        $push: { comments: { user: req.body.user, comment: req.body.comment } }
-      }
-    );
-    res.status(200).json({
-      status: "success",
-      data: "ok"
-    });
-  } catch (err) {
-    res.status(404).json({
-      status: "fail",
-      message: err
-    });
-  }
-};
+exports.postComment = catchAsync(async (req, res, next) => {
+  await Post.updateOne(
+    { _id: req.params.id },
+    {
+      $push: { comments: { user: req.body.user, comment: req.body.comment } }
+    }
+  );
+  res.status(200).json({
+    status: "success",
+    data: "ok"
+  });
+  // catch (err) {
+  // res.status(404)
+});
 
 //delete a post
-exports.deletePost = async (req, res) => {
-  try {
-    await Post.findByIdAndDelete(req.params.id);
-    res.status(204).json({
-      status: "success",
-      data: null
-    });
-  } catch (err) {
-    res.status(404).json({
-      status: "fail",
-      message: err
-    });
-  }
-};
+exports.deletePost = catchAsync(async (req, res, next) => {
+  await Post.findByIdAndDelete(req.params.id);
+  res.status(204).json({
+    status: "success",
+    data: null
+  });
+  // catch (err) {
+  // res.status(404)
+});
 
 //test-patch
 exports.testEndPoint = (req, res) => {
   res.status(200).json({
     status: "success",
-    message: "testing end-point: /api/v1/posts/test"
+    message: "checkpoint - Windows project setup and running"
   });
 };
 
 //MONGO/MONGOOSE AGGREGATION
-exports.stats = async (req, res) => {
+exports.stats = catchAsync(async (req, res, next) => {
   const randomNum = gzUI(5, 10); //my own npm package
-  try {
-    const stats = await Post.aggregate([
-      {
-        $match: { by: "gustavo" }
-      },
-      {
-        $group: {
-          _id: "$location",
-          total: { $sum: 1 }
-        }
-      },
-      {
-        $sort: { _id: 1 }
-      },
-      {
-        $project: { total: 0 }
+  const stats = await Post.aggregate([
+    {
+      $match: { by: "Gustavo" }
+    },
+    {
+      $group: {
+        _id: "$location",
+        total: { $sum: 1 }
       }
-    ]);
-    res.status(200).json({
-      status: "success",
-      data: stats,
-      randomNum
-    });
-  } catch (err) {
-    res.status(404).json({
-      status: "fail",
-      message: err
-    });
-  }
-};
+    },
+    {
+      $sort: { _id: 1 }
+    },
+    {
+      $project: { total: 0 }
+    }
+  ]);
+  res.status(200).json({
+    status: "success",
+    data: stats,
+    randomNum
+  });
+  // catch (err) {
+  // res.status(404)
+});

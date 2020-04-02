@@ -1,6 +1,7 @@
+const AppError = require("../utils/appError");
+const catchAsync = require("../utils/catchAsync");
 const dotenv = require("dotenv");
 const User = require("../models/userModel");
-const APIFeatures = require("../utils/apiFeatures");
 
 dotenv.config();
 
@@ -12,103 +13,85 @@ exports.usersAlias = (req, res, next) => {
 };
 
 //ZONA
-exports.createUser = async (req, res) => {
-  try {
-    const newUser = await User.create(req.body);
-    res.status(200).json({
-      status: "success",
-      data: {
-        user: newUser
-      }
-    });
-  } catch (err) {
-    res.status(400).json({
-      status: "fail",
-      message: "Invalid data sent"
-    });
-  }
-};
+exports.createUser = catchAsync(async (req, res, next) => {
+  const newUser = await User.create(req.body);
+  res.status(200).json({
+    status: "success",
+    data: {
+      user: newUser
+    }
+  });
+  // } catch (err) {
+  //   res.status(400)
+  // }
+});
 
-exports.invitationCode = async (req, res) => {
+exports.invitationCode = catchAsync(async (req, res, next) => {
   if (req.body.code === process.env.INVITATION_CODE) {
     res.status(200).json({
       status: "success",
       data: true
     });
   }
-};
+});
 
-//TODO: I DONT THINK THIS IS SECURE (GET ALL USERS)
-exports.getAllUsers = async (req, res) => {
-  try {
-    const features = new APIFeatures(User.find(), req.query)
-      .filter()
-      .sort()
-      .limitFields()
-      .paginate();
-    const users = await features.query;
+//FIXME: (GET ALL USERS?)
+exports.getAllUsers = catchAsync(async (req, res, next) => {
+  const users = await User.find();
+  res.status(200).json({
+    status: "success",
+    results: users.length,
+    data: { users }
+  });
+  // } catch (err) {
+  //   res.status(404)
+  // }
+});
 
-    //SEND RESPONSE
-    res.status(200).json({
-      status: "success",
-      results: users.length,
-      data: { users }
-    });
-  } catch (err) {
-    res.status(404).json({
-      status: "fail",
-      message: err
-    });
+exports.getUser = catchAsync(async (req, res, next) => {
+  const user = await User.findById(req.params.id);
+  if (!user) {
+    return next(new AppError("No user found with that ID", 404));
   }
-};
+  res.status(200).json({
+    status: "success",
+    data: { user }
+  });
+  // } catch (err) {
+  //   res.status(404)
+  // }
+});
 
-exports.getUser = async (req, res) => {
-  try {
-    const user = await User.findById(req.params.id);
-    res.status(200).json({
-      status: "success",
-      data: { user }
-    });
-  } catch (err) {
-    res.status(404).json({
-      status: "fail",
-      message: err
-    });
+exports.updateUser = catchAsync(async (req, res, next) => {
+  const user = await User.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true
+  });
+  if (!user) {
+    return next(new AppError("No user found with that ID", 404));
   }
-};
+  res.status(200).json({
+    status: "success",
+    data: { user }
+  });
+  // } catch (err) {
+  //   res.status(404)
+  // }
+});
 
-exports.updateUser = async (req, res) => {
-  try {
-    const user = await User.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true
-    });
-    res.status(200).json({
-      status: "success",
-      data: { user }
-    });
-  } catch (err) {
-    res.status(404).json({
-      status: "fail",
-      message: err
-    });
+exports.deleteUser = catchAsync(async (req, res, next) => {
+  const user = await User.findByIdAndDelete(req.params.id);
+  if (!user) {
+    return next(new AppError("No user found with that ID", 404));
   }
-};
-
-exports.deleteUser = async (req, res) => {
-  try {
-    await User.findByIdAndDelete(req.params.id);
-    res.status(204).json({
-      status: "success",
-      data: null
-    });
-  } catch (err) {
-    res.status(404).json({
-      status: "fail",
-      message: err
-    });
-  }
-};
+  res.status(204).json({
+    status: "success",
+    data: null
+  });
+  // } catch (err) {
+  //   res.status(404)
+  // }
+});
 //ZONA
 
 exports.checkLogin = async (req, res) => {

@@ -10,17 +10,5 @@ export const items = [
     name: "ARTICLE",
     label: "Article",
     image: "article.png"
-  },
-  {
-    id: 3,
-    name: "NOTE",
-    label: "Note",
-    image: "note.png"
-  },
-  {
-    id: 4,
-    name: "BOOKMARK",
-    label: "Bookmark",
-    image: "bookmark.png"
   }
 ];

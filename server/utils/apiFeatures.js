@@ -22,7 +22,7 @@ class APIFeatures {
   sort() {
     if (this.queryString.sort) {
       const sort = this.queryString.sort.split(",").join(" ");
-      this.query = this.query.sort(sort); //this is like: sort(price) | from the url: /users?sort=price
+      this.query = this.query.sort(sort); //this is like: sort(price) | from the url: /posts?sort=price
     } else {
       this.query = this.query.sort("-createdAt");
     }

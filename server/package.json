@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
+    "debug": "ndb server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Gustavo Zapata",
@@ -19,5 +20,9 @@
     "mongoose": "^5.8.9",
     "morgan": "^1.9.1",
     "multer": "^1.4.2"
+  },
+  "devDependencies": {
+    "ndb": "^1.1.5",
+    "nodemon": "^2.0.2"
   }
 }

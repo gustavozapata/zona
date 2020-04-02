@@ -4,9 +4,7 @@ const router = express.Router();
 
 //will execute whenever a param 'id' is in the request
 router.param("id", controller.checkId);
-
 router.route("/stats").get(controller.stats);
-
 router.route("/test").get(controller.testEndPoint);
 
 router
@@ -15,7 +13,6 @@ router
   .post(controller.addPost);
 
 router.route("/likes/:id").patch(controller.likePost);
-
 router.route("/comments/:id").patch(controller.postComment);
 
 router
