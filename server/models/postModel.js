@@ -6,49 +6,49 @@ const postSchema = new Schema(
   {
     description: {
       type: String,
-      required: [true, "you must enter a description"]
+      required: [true, "You must enter a description"],
     },
     location: {
       type: String,
-      required: [true, "you must enter a location"]
+      required: [true, "You must enter a location"],
     },
     image: {
       type: String,
       default: "none",
-      required: true
+      required: true,
     },
     by: {
       type: String,
-      required: true
+      required: true,
     },
     date: {
       type: String,
-      default: Date.now()
+      default: Date.now(),
     },
     love: {
       type: Number,
-      default: 0
+      default: 0,
     },
     funny: {
       type: Number,
-      default: 0
+      default: 0,
     },
-    comments: [Object]
+    comments: [Object],
   },
   {
-    toJSON: { virtuals: true }
+    toJSON: { virtuals: true },
   }
 );
 
-postSchema.virtual("myVirtual").get(function() {
+postSchema.virtual("myVirtual").get(function () {
   return this.likes * 5;
 });
 
-postSchema.pre(/^find/, function(next) {
+postSchema.pre(/^find/, function (next) {
   this.queryTime = Date.now();
   next();
 });
-postSchema.post(/^find/, function(doc, next) {
+postSchema.post(/^find/, function (doc, next) {
   console.log(`Query took ${Date.now() - this.queryTime}`);
   next();
 });

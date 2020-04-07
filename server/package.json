@@ -5,6 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "node server.js",
+    "start:prod:win": "SET NODE_ENV=production&&nodemon server.js",
+    "start:prod:mac": "NODE_ENV=production nodemon server.js",
     "dev": "nodemon server.js",
     "debug": "ndb server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
