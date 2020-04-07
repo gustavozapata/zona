@@ -1,6 +1,7 @@
 #GZ
 /storage
 /data
+/Local
 
 pipeline.log
 .DS_Store

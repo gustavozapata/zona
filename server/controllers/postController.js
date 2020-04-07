@@ -15,7 +15,7 @@ const uploadImageV2 = () => {
     },
     filename: (req, file, cb) => {
       cb(null, file.originalname);
-    }
+    },
   });
   const multerFilter = (req, file, cb) => {
     //filters the files - only accepts images
@@ -27,13 +27,13 @@ const uploadImageV2 = () => {
   };
   const upload = multer({
     storage: multerStorage,
-    fileFilter: multerFilter
+    fileFilter: multerFilter,
   });
   exports.uploadPostImage = upload.single("postImage");
   exports.saveImage = (req, res) => {
     res.status(200).json({
       status: "success",
-      message: "post image uploaded"
+      message: "post image uploaded",
     });
   };
 };
@@ -46,7 +46,7 @@ exports.checkBody = (req, res, next) => {
   if (!req.body.country) {
     return res.status(400).json({
       status: "fail",
-      message: "missing country"
+      message: "missing country",
     });
   }
   next();
@@ -64,7 +64,7 @@ exports.getPosts = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: "success",
     results: posts.length,
-    data: { posts }
+    data: { posts },
   });
   // catch (err) {
   // res.status(404)
@@ -76,7 +76,7 @@ exports.addPost = catchAsync(async (req, res, next) => {
   const newPost = await Post.create(req.body);
   res.status(200).json({
     status: "success",
-    data: { post: newPost }
+    data: { post: newPost },
   });
   console.log("post added: ", newPost);
   // catch (err) {
@@ -91,7 +91,7 @@ exports.likePost = catchAsync(async (req, res, next) => {
   await Post.updateOne({ _id: req.params.id }, { [reaction]: likes });
   res.status(200).json({
     status: "success",
-    data: likes
+    data: likes,
   });
   //  catch (err) {
   //  res.status(404)
@@ -101,12 +101,12 @@ exports.postComment = catchAsync(async (req, res, next) => {
   await Post.updateOne(
     { _id: req.params.id },
     {
-      $push: { comments: { user: req.body.user, comment: req.body.comment } }
+      $push: { comments: { user: req.body.user, comment: req.body.comment } },
     }
   );
   res.status(200).json({
     status: "success",
-    data: "ok"
+    data: "ok",
   });
   // catch (err) {
   // res.status(404)
@@ -117,7 +117,7 @@ exports.deletePost = catchAsync(async (req, res, next) => {
   await Post.findByIdAndDelete(req.params.id);
   res.status(204).json({
     status: "success",
-    data: null
+    data: null,
   });
   // catch (err) {
   // res.status(404)
@@ -127,7 +127,8 @@ exports.deletePost = catchAsync(async (req, res, next) => {
 exports.testEndPoint = (req, res) => {
   res.status(200).json({
     status: "success",
-    message: "checkpoint - Windows project setup and running"
+    message: "checkpoint - Windows project setup and running",
+    env: process.env.NODE_ENV,
   });
 };
 
@@ -136,25 +137,25 @@ exports.stats = catchAsync(async (req, res, next) => {
   const randomNum = gzUI(5, 10); //my own npm package
   const stats = await Post.aggregate([
     {
-      $match: { by: "Gustavo" }
+      $match: { by: "Gustavo" },
     },
     {
       $group: {
         _id: "$location",
-        total: { $sum: 1 }
-      }
+        total: { $sum: 1 },
+      },
     },
     {
-      $sort: { _id: 1 }
+      $sort: { _id: 1 },
     },
     {
-      $project: { total: 0 }
-    }
+      $project: { total: 0 },
+    },
   ]);
   res.status(200).json({
     status: "success",
     data: stats,
-    randomNum
+    randomNum,
   });
   // catch (err) {
   // res.status(404)
