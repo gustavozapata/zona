@@ -26,6 +26,7 @@ button:hover {
 .warning {
   color: red;
   margin-top: -20px;
+  margin-bottom: 22px;
   font-size: 0.8em;
 }
 

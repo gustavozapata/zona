@@ -14,6 +14,7 @@
   "author": "Gustavo Zapata",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
@@ -21,7 +22,8 @@
     "gz-ui-react": "^1.0.0",
     "mongoose": "^5.8.9",
     "morgan": "^1.9.1",
-    "multer": "^1.4.2"
+    "multer": "^1.4.2",
+    "validator": "^13.0.0"
   },
   "devDependencies": {
     "ndb": "^1.1.5",

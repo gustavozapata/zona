@@ -5,24 +5,30 @@ export default function SingUp(props) {
   const [user, setUser] = useState({
     name: "",
     email: "",
-    password: ""
+    password: "",
+    confirmPassword: "",
   });
   const [confirmPass, setConfirmPass] = useState(true);
+  const [alert, setAlert] = useState("");
 
-  const handleSubmit = e => {
-    const { name, email, password } = user;
+  const handleSubmit = (e) => {
+    const { name, email, password, confirmPassword } = user;
     e.preventDefault();
 
     axios
-      .post("https://zona-server.herokuapp.com/api/v1/users", {
+      .post("https://zona-server.herokuapp.com/api/v1/users/signup", {
         name,
         email,
-        password
+        password,
+        confirmPassword,
       })
-      .then(res => {
+      .then((res) => {
         props.signUp();
       })
-      .catch(err => console.log(err));
+      .catch((error) => {
+        // console.log(error.response); //this is how we get the res.json({...}) from the server
+        setAlert("There was an issue creating the account. Try again later");
+      });
   };
 
   return (
@@ -37,7 +43,7 @@ export default function SingUp(props) {
               id="name"
               type="text"
               required
-              onChange={e => setUser({ ...user, name: e.target.value })}
+              onChange={(e) => setUser({ ...user, name: e.target.value })}
             />
           </div>
           <div>
@@ -47,7 +53,7 @@ export default function SingUp(props) {
               id="email"
               type="email"
               required
-              onChange={e => setUser({ ...user, email: e.target.value })}
+              onChange={(e) => setUser({ ...user, email: e.target.value })}
             />
           </div>
           <div>
@@ -57,7 +63,14 @@ export default function SingUp(props) {
               id="password"
               type="password"
               required
-              onChange={e => setUser({ ...user, password: e.target.value })}
+              onChange={(e) => {
+                if (user.confirmPassword !== "") {
+                  e.target.value === user.confirmPassword
+                    ? setConfirmPass(true)
+                    : setConfirmPass(false);
+                }
+                setUser({ ...user, password: e.target.value });
+              }}
             />
           </div>
           <div>
@@ -67,14 +80,16 @@ export default function SingUp(props) {
               id="confirmpassword"
               type="password"
               required
-              onChange={e => {
+              onChange={(e) => {
                 e.target.value === user.password
                   ? setConfirmPass(true)
                   : setConfirmPass(false);
+                setUser({ ...user, confirmPassword: e.target.value });
               }}
             />
           </div>
           {!confirmPass && <p className="warning">Must be same as password</p>}
+          {alert && <p className="warning">{alert}</p>}
         </div>
         <button className="button">Sign up</button>
       </form>

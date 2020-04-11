@@ -16,11 +16,11 @@ exports.usersAlias = (req, res, next) => {
 //ZONA
 exports.createUser = catchAsync(async (req, res, next) => {
   const newUser = await User.create(req.body);
-  res.status(200).json({
+  res.status(201).json({
     status: "success",
     data: {
-      user: newUser
-    }
+      user: newUser,
+    },
   });
   // } catch (err) {
   //   res.status(400)
@@ -31,7 +31,7 @@ exports.invitationCode = catchAsync(async (req, res, next) => {
   if (req.body.code === process.env.INVITATION_CODE) {
     res.status(200).json({
       status: "success",
-      data: true
+      data: true,
     });
   }
 });
@@ -45,7 +45,7 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: "success",
     results: users.length,
-    data: { users }
+    data: { users },
   });
   // } catch (err) {
   //   res.status(404)
@@ -59,7 +59,7 @@ exports.getUser = catchAsync(async (req, res, next) => {
   }
   res.status(200).json({
     status: "success",
-    data: { user }
+    data: { user },
   });
   // } catch (err) {
   //   res.status(404)
@@ -69,14 +69,14 @@ exports.getUser = catchAsync(async (req, res, next) => {
 exports.updateUser = catchAsync(async (req, res, next) => {
   const user = await User.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
-    runValidators: true
+    runValidators: true,
   });
   if (!user) {
     return next(new AppError("No user found with that ID", 404));
   }
   res.status(200).json({
     status: "success",
-    data: { user }
+    data: { user },
   });
   // } catch (err) {
   //   res.status(404)
@@ -90,7 +90,7 @@ exports.deleteUser = catchAsync(async (req, res, next) => {
   }
   res.status(204).json({
     status: "success",
-    data: null
+    data: null,
   });
   // } catch (err) {
   //   res.status(404)
