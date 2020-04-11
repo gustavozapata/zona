@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema({
     unique: true,
     lowecase: true, //converts email to lowercase
     validate: [validator.isEmail, "Please enter a valid email"],
-    trim: true, //removes leading or ending spaces
+    trim: true, //removes leading or trailing spaces
   },
   photo: String,
   password: {
