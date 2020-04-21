@@ -14,19 +14,6 @@ exports.usersAlias = (req, res, next) => {
 };
 
 //ZONA
-exports.createUser = catchAsync(async (req, res, next) => {
-  const newUser = await User.create(req.body);
-  res.status(201).json({
-    status: "success",
-    data: {
-      user: newUser,
-    },
-  });
-  // } catch (err) {
-  //   res.status(400)
-  // }
-});
-
 exports.invitationCode = catchAsync(async (req, res, next) => {
   if (req.body.code === process.env.INVITATION_CODE) {
     res.status(200).json({
@@ -39,7 +26,7 @@ exports.invitationCode = catchAsync(async (req, res, next) => {
 //FIXME: (GET ALL USERS?)
 exports.getAllUsers = catchAsync(async (req, res, next) => {
   const features = new APIFeatures(User.find(), req.query).limitFields();
-  features.query.select(["-_id", "-email"]);
+  // features.query.select(["-_id", "-email"]);
   const users = await features.query;
 
   res.status(200).json({
@@ -47,9 +34,6 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
     results: users.length,
     data: { users },
   });
-  // } catch (err) {
-  //   res.status(404)
-  // }
 });
 
 exports.getUser = catchAsync(async (req, res, next) => {
@@ -61,9 +45,6 @@ exports.getUser = catchAsync(async (req, res, next) => {
     status: "success",
     data: { user },
   });
-  // } catch (err) {
-  //   res.status(404)
-  // }
 });
 
 exports.updateUser = catchAsync(async (req, res, next) => {
@@ -78,9 +59,6 @@ exports.updateUser = catchAsync(async (req, res, next) => {
     status: "success",
     data: { user },
   });
-  // } catch (err) {
-  //   res.status(404)
-  // }
 });
 
 exports.deleteUser = catchAsync(async (req, res, next) => {
@@ -92,18 +70,24 @@ exports.deleteUser = catchAsync(async (req, res, next) => {
     status: "success",
     data: null,
   });
-  // } catch (err) {
-  //   res.status(404)
-  // }
 });
 //ZONA
 
-exports.checkLogin = async (req, res) => {
-  const { email, password } = req.body;
-  const user = await User.find({ email, password });
-  if (user.length > 0) {
-    res.json({ logged: true, user: user[0].name });
-  } else {
-    res.json({ logged: false });
-  }
-};
+// exports.createUser = catchAsync(async (req, res, next) => {
+//   const newUser = await User.create(req.body);
+//   res.status(201).json({
+//     status: "success",
+//     data: {
+//       user: newUser,
+//     },
+//   });
+// });
+// exports.checkLogin = async (req, res) => {
+//   const { email, password } = req.body;
+//   const user = await User.find({ email, password });
+//   if (user.length > 0) {
+//     res.json({ logged: true, user: user[0].name });
+//   } else {
+//     res.json({ logged: false });
+//   }
+// };

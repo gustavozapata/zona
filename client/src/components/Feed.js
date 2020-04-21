@@ -9,19 +9,19 @@ export class Feed extends Component {
     super(props);
     this.state = {
       showNewPost: false,
-      newPostAdded: false
+      newPostAdded: false,
     };
   }
 
   closeNewPost = () => {
     this.setState({
-      showNewPost: false
+      showNewPost: false,
     });
   };
 
   addPost = () => {
     this.setState({
-      newPostAdded: true
+      newPostAdded: true,
     });
   };
 
@@ -35,7 +35,11 @@ export class Feed extends Component {
             addPost={this.addPost}
           />
         )}
-        <Content postAdded={this.state.newPostAdded} user={this.props.user} />
+        <Content
+          postAdded={this.state.newPostAdded}
+          user={this.props.user}
+          userPhoto={this.props.userPhoto}
+        />
         {/* <SideBar /> */}
       </div>
     );

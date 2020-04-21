@@ -20,6 +20,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [code, setCode] = useState("");
   const [user, setUser] = useState("");
+  const [userPhoto, setUserPhoto] = useState("");
 
   const enter = useRef();
 
@@ -31,9 +32,9 @@ function App() {
   const checkCode = () => {
     axios
       .post("https://zona-server.herokuapp.com/api/v1/users/invitation", {
-        code
+        code,
       })
-      .then(res => {
+      .then((res) => {
         if (res.data.data) {
           setShowSignup(true);
           theCode = "";
@@ -41,7 +42,7 @@ function App() {
       });
   };
 
-  const goNext = e => {
+  const goNext = (e) => {
     theCode += e.target.value;
     if (e.target.id !== "last") {
       const form = e.target.form;
@@ -58,12 +59,13 @@ function App() {
     axios
       .post("https://zona-server.herokuapp.com/api/v1/users/login", {
         email,
-        password
+        password,
       })
-      .then(res => {
+      .then((res) => {
         if (res.data.logged) {
           localStorage.setItem("isLogged", true);
           localStorage.setItem("user", res.data.user);
+          setUserPhoto(res.data.photo);
           setShowLogin(false);
           setIsLogged(localStorage.getItem("isLogged"));
           setUser(localStorage.getItem("user"));
@@ -99,8 +101,8 @@ function App() {
   //USING MY (GZ) NPM PACKAGE
   const gzUI = async () => {
     await fetch("https://zona-server.herokuapp.com/api/v1/posts/stats")
-      .then(res => res.json())
-      .then(res => console.log(res));
+      .then((res) => res.json())
+      .then((res) => console.log(res));
   };
 
   return (
@@ -109,6 +111,7 @@ function App() {
       {isLogged ? (
         <Feed
           user={user}
+          userPhoto={userPhoto}
           showNewPost={showNewPost}
           closeNewPost={closeNewPost}
         />

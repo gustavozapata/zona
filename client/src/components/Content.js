@@ -6,7 +6,7 @@ export class Content extends Component {
     super(props);
     this.state = {
       isLoading: false,
-      data: []
+      data: [],
     };
   }
 
@@ -24,17 +24,17 @@ export class Content extends Component {
 
   getAll() {
     this.setState({
-      isLoading: true
+      isLoading: true,
     });
     axios
       .get("https://zona-server.herokuapp.com/api/v1/posts")
-      .then(res => {
+      .then((res) => {
         this.setState({
           data: res.data.data.posts.reverse(),
-          isLoading: false
+          isLoading: false,
         });
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   }
@@ -62,27 +62,27 @@ export class Content extends Component {
     axios
       .patch(`https://zona-server.herokuapp.com/api/v1/posts/likes/${id}`, {
         reaction,
-        likes
+        likes,
       })
-      .then(res => {
+      .then((res) => {
         if (reaction === "love") {
           //TODO: MAKE THIS BETTER FOR SMOOTH UPDATE
         }
         this.getAll(); //TODO: MAKE THIS BETTER FOR SMOOTH UPDATE
       })
-      .catch(err => console.log("my error: ", err));
+      .catch((err) => console.log("my error: ", err));
   }
 
   postComment(id, comment) {
     axios
       .patch(`https://zona-server.herokuapp.com/api/v1/posts/comments/${id}`, {
         user: this.props.user,
-        comment
+        comment,
       })
-      .then(res => {
+      .then((res) => {
         this.getAll();
       })
-      .catch(err => console.log("my error: ", err));
+      .catch((err) => console.log("my error: ", err));
   }
 
   render() {
@@ -138,21 +138,21 @@ export class Content extends Component {
               <div className="comments">
                 <div className="user-add-comment">
                   <img
-                    src={require(`../images/users/${this.props.user.toLowerCase()}.png`)}
-                    alt={this.props.user}
+                    src={require(`../images/users/${this.props.userPhoto}.png`)}
+                    alt={this.props.userPhoto}
                   />
                   <textarea
                     value={this.add_comment[i]}
-                    onChange={e => {
+                    onChange={(e) => {
                       this.add_comment[i] = e.target.value;
                       this.setState({
-                        comment: e.target.value
+                        comment: e.target.value,
                       });
                     }}
-                    onFocus={e => {
+                    onFocus={(e) => {
                       e.target.className = "comment-active";
                     }}
-                    onBlur={e => {
+                    onBlur={(e) => {
                       if (this.add_comment[i] === "") {
                         e.target.className = "";
                       }
@@ -170,7 +170,7 @@ export class Content extends Component {
                         visibility:
                           this.add_comment[i] && this.add_comment[i].length > 0
                             ? "visible"
-                            : "hidden"
+                            : "hidden",
                       }}
                     >
                       Post

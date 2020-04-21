@@ -66,8 +66,6 @@ exports.getPosts = catchAsync(async (req, res, next) => {
     results: posts.length,
     data: { posts },
   });
-  // catch (err) {
-  // res.status(404)
 });
 
 //add post
@@ -79,8 +77,6 @@ exports.addPost = catchAsync(async (req, res, next) => {
     data: { post: newPost },
   });
   console.log("post added: ", newPost);
-  // catch (err) {
-  // res.status(404)
 });
 
 //like post
@@ -93,8 +89,6 @@ exports.likePost = catchAsync(async (req, res, next) => {
     status: "success",
     data: likes,
   });
-  //  catch (err) {
-  //  res.status(404)
 });
 //post comment
 exports.postComment = catchAsync(async (req, res, next) => {
@@ -108,8 +102,6 @@ exports.postComment = catchAsync(async (req, res, next) => {
     status: "success",
     data: "ok",
   });
-  // catch (err) {
-  // res.status(404)
 });
 
 //delete a post
@@ -119,8 +111,6 @@ exports.deletePost = catchAsync(async (req, res, next) => {
     status: "success",
     data: null,
   });
-  // catch (err) {
-  // res.status(404)
 });
 
 //test-patch
@@ -157,6 +147,4 @@ exports.stats = catchAsync(async (req, res, next) => {
     data: stats,
     randomNum,
   });
-  // catch (err) {
-  // res.status(404)
 });

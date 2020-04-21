@@ -5,17 +5,33 @@ const router = express.Router();
 
 //TODO: AUTHENTICATION VERSION
 router.post("/signup", authController.signup);
+router.post("/login", authController.login);
 
-router.route("/").get(controller.getAllUsers).post(controller.createUser);
+router.post("/forgotPassword", authController.forgotPassword); //receives only the email address
+router.patch("/resetPassword/:token", authController.resetPassword); //receives the token and the 'new password'
+
+router
+  .route("/")
+  .get(
+    authController.protect,
+    authController.restrictTo("admin", "developer"),
+    controller.getAllUsers
+  );
+// .post(controller.createUser);
 
 router.route("/top-5-users").get(controller.usersAlias, controller.getAllUsers);
 router.route("/invitation").post(controller.invitationCode);
-router.route("/login").post(controller.checkLogin);
+// router.route("/logIn").post(controller.checkLogin);
 
 router
   .route("/:id")
   .get(controller.getUser)
   .patch(controller.updateUser)
-  .delete(controller.deleteUser);
+  //TODO: AUTHORIZATION VERSION
+  .delete(
+    authController.protect,
+    authController.restrictTo("admin"),
+    controller.deleteUser
+  );
 
 module.exports = router;
