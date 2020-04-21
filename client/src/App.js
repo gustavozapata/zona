@@ -20,7 +20,6 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [code, setCode] = useState("");
   const [user, setUser] = useState("");
-  const [userPhoto, setUserPhoto] = useState("");
 
   const enter = useRef();
 
@@ -65,7 +64,6 @@ function App() {
         if (res.data.logged) {
           localStorage.setItem("isLogged", true);
           localStorage.setItem("user", res.data.user);
-          setUserPhoto(res.data.photo);
           setShowLogin(false);
           setIsLogged(localStorage.getItem("isLogged"));
           setUser(localStorage.getItem("user"));
@@ -74,6 +72,10 @@ function App() {
           setWrongLogin(true);
           setIsLoading(false);
         }
+      })
+      .catch(() => {
+        setWrongLogin(true);
+        setIsLoading(false);
       });
   };
 
@@ -111,7 +113,6 @@ function App() {
       {isLogged ? (
         <Feed
           user={user}
-          userPhoto={userPhoto}
           showNewPost={showNewPost}
           closeNewPost={closeNewPost}
         />

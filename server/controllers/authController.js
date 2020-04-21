@@ -12,6 +12,18 @@ const signToken = (id) => {
   });
 };
 
+const createSendToken = (user, statusCode, res) => {
+  const token = signToken(user._id);
+
+  res.status(statusCode).json({
+    status: "success",
+    token,
+    data: {
+      user,
+    },
+  });
+};
+
 exports.signup = catchAsync(async (req, res, next) => {
   // const newUser = await User.create(req.body);
   //FIXME: the above is replaced by the below - problem with the above is that the user can send a body to that route with say {admin: true} and this is not good
@@ -22,15 +34,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     confirmPassword: req.body.confirmPassword,
   });
 
-  const token = signToken(newUser._id);
-
-  res.status(201).json({
-    status: "success",
-    token,
-    data: {
-      user: newUser,
-    },
-  });
+  createSendToken(newUser, 201, res);
 });
 
 exports.login = catchAsync(async (req, res, next) => {
@@ -58,6 +62,7 @@ exports.login = catchAsync(async (req, res, next) => {
     user: user.name,
     photo: user.photo,
   });
+  // createSendToken(user, 200, res) FIXME: add this once above is resolved
 });
 
 exports.protect = catchAsync(async (req, res, next) => {
@@ -77,8 +82,9 @@ exports.protect = catchAsync(async (req, res, next) => {
     );
   }
 
-  //2) verification token - we use 'promisify' (a node buil-in util) that converts a method into a promise
+  //2) verification token - jwt.verify(token sent by user, SECRET in .env)
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+  //+we use 'promisify' (a node built-in util) that converts a method into a promise
 
   //3) check if user still exists - this is an extra step (what if the user has deleted the account after the token has been issued) - the token should then not work
   const currentUser = await User.findById(decoded.id);
@@ -184,10 +190,23 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   //3) update changePasswordAt property for the user **this is handled in the userModel.js
 
   //4) log the user in, send JWT
-  const token = signToken(user._id);
+  createSendToken(user, 200, res);
+});
 
-  res.status(200).json({
-    status: "success",
-    token,
-  });
+exports.updatePassword = catchAsync(async (req, res, next) => {
+  //1. get user from collection
+  const user = await User.findById(req.user.id).select("+password"); //since this scenario the user is logged, we have access to the id from the protect() middleware
+
+  //2. check if POSTed current password is correct
+  if (!(await user.correctPassword(req.body.currentPassword, user.password))) {
+    return next(new AppError("Your current password is wrong", 401));
+  }
+
+  //3. if so, update password
+  user.password = req.body.password;
+  user.confirmPassword = req.body.confirmPassword;
+  await user.save();
+
+  //4. log user in, send JWT
+  createSendToken(user, 200, res);
 });

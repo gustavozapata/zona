@@ -10,6 +10,14 @@ router.post("/login", authController.login);
 router.post("/forgotPassword", authController.forgotPassword); //receives only the email address
 router.patch("/resetPassword/:token", authController.resetPassword); //receives the token and the 'new password'
 
+router.patch(
+  "/updateMyPassword",
+  authController.protect,
+  authController.updatePassword
+); //receives the token and the 'new password'
+
+router.patch("/updateMe", authController.protect, controller.updateMe);
+
 router
   .route("/")
   .get(
@@ -17,17 +25,14 @@ router
     authController.restrictTo("admin", "developer"),
     controller.getAllUsers
   );
-// .post(controller.createUser);
 
 router.route("/top-5-users").get(controller.usersAlias, controller.getAllUsers);
 router.route("/invitation").post(controller.invitationCode);
-// router.route("/logIn").post(controller.checkLogin);
 
 router
   .route("/:id")
   .get(controller.getUser)
   .patch(controller.updateUser)
-  //TODO: AUTHORIZATION VERSION
   .delete(
     authController.protect,
     authController.restrictTo("admin"),

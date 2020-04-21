@@ -138,8 +138,8 @@ export class Content extends Component {
               <div className="comments">
                 <div className="user-add-comment">
                   <img
-                    src={require(`../images/users/${this.props.userPhoto}.png`)}
-                    alt={this.props.userPhoto}
+                    src={require(`../images/users/${this.props.user.toLowerCase()}.png`)}
+                    alt={this.props.user}
                   />
                   <textarea
                     value={this.add_comment[i]}
