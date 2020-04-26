@@ -46,6 +46,11 @@ const userSchema = new mongoose.Schema({
   passwordChangedAt: Date,
   passwordResetToken: String,
   passwordResetExpires: Date,
+  active: {
+    type: Boolean,
+    default: true,
+    select: false,
+  },
   createdAt: {
     type: Date,
     default: Date.now(),
@@ -72,6 +77,12 @@ userSchema.pre("save", function (next) {
 
   //else (so if the pass has been modified), set the passwordChangedAt property
   this.passwordChangedAt = Date.now() - 1000; // - 1sec since we want to make sure the token is created after the pass has been changed
+  next();
+});
+
+userSchema.pre(/^find/, function (next) {
+  //run this before any 'User.find()' runs in our app - this hides the users with active: false
+  this.find({ active: { $ne: false } });
   next();
 });
 
@@ -116,6 +127,6 @@ userSchema.methods.createPasswordResetToken = function () {
   return resetToken;
 };
 
-const User = mongoose.model("users", userSchema);
+const User = mongoose.model("User", userSchema);
 
 module.exports = User;

@@ -68,6 +68,19 @@ exports.getPosts = catchAsync(async (req, res, next) => {
   });
 });
 
+//get one post
+exports.getPost = catchAsync(async (req, res, next) => {
+  const post = await Post.findById(req.params.id).populate("comments_ref");
+  if (!post) return next(new AppError("No post found with that ID", 404));
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      post,
+    },
+  });
+});
+
 //add post
 exports.addPost = catchAsync(async (req, res, next) => {
   console.log("addPost");

@@ -17,6 +17,7 @@ router.patch(
 ); //receives the token and the 'new password'
 
 router.patch("/updateMe", authController.protect, controller.updateMe);
+router.delete("/deleteMe", authController.protect, controller.deleteMe);
 
 router
   .route("/")

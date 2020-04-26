@@ -1,6 +1,11 @@
 import React, { Component } from "react";
 import axios from "axios";
 
+let host =
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:4000"
+    : "https://zona-server.herokuapp.com";
+
 export class Content extends Component {
   constructor(props) {
     super(props);
@@ -27,7 +32,8 @@ export class Content extends Component {
       isLoading: true,
     });
     axios
-      .get("https://zona-server.herokuapp.com/api/v1/posts")
+      // .get("https://zona-server.herokuapp.com/api/v1/posts")
+      .get(`${host}/api/v1/posts`)
       .then((res) => {
         this.setState({
           data: res.data.data.posts.reverse(),
