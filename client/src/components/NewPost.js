@@ -21,7 +21,7 @@ export default function NewPost(props) {
     setIsImageChosen(true);
   };
 
-  const returnFileSize = number => {
+  const returnFileSize = (number) => {
     if (number < 1024) {
       return number + "bytes";
     } else if (number >= 1024 && number < 1048576) {
@@ -31,7 +31,7 @@ export default function NewPost(props) {
     }
   };
 
-  const post = async e => {
+  const post = async (e) => {
     setLoadingBar(10);
     e.persist();
     e.preventDefault();
@@ -39,18 +39,26 @@ export default function NewPost(props) {
       const options = {
         year: "numeric",
         month: "short",
-        day: "numeric"
+        day: "numeric",
       };
       fileName = `post-${Date.now()}.${file[0].type.split("/")[1]}`;
       try {
         await axios
-          .post("https://zona-server.herokuapp.com/api/v1/posts", {
-            description,
-            image: fileName,
-            by: props.user,
-            location,
-            date: new Date().toLocaleDateString("en-US", options)
-          })
+          .post(
+            "https://zona-server.herokuapp.com/api/v1/posts",
+            {
+              description,
+              image: fileName,
+              by: props.user,
+              location,
+              date: new Date().toLocaleDateString("en-US", options),
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+            }
+          )
           .then(() => {
             setLoadingBar(50);
             saveImage(e);
@@ -61,7 +69,7 @@ export default function NewPost(props) {
     }
   };
 
-  const saveImage = async e => {
+  const saveImage = async (e) => {
     setLoadingBar(100);
     e.preventDefault();
     const formData = new FormData();
@@ -70,8 +78,8 @@ export default function NewPost(props) {
       await axios
         .post("https://server.gustavozapata.me/zona/storage", formData, {
           headers: {
-            "Content-Type": "multipart/form-data"
-          }
+            "Content-Type": "multipart/form-data",
+          },
         })
         .then(() => {
           props.closeNewPost();
@@ -84,7 +92,7 @@ export default function NewPost(props) {
     }
   };
 
-  const back = e => {
+  const back = (e) => {
     e.preventDefault();
     setIsImageChosen(false);
   };
@@ -120,7 +128,7 @@ export default function NewPost(props) {
                     id="location"
                     required
                     value={location}
-                    onChange={e => setLocation(e.target.value)}
+                    onChange={(e) => setLocation(e.target.value)}
                   />
                   <br />
                   <br />
@@ -133,7 +141,7 @@ export default function NewPost(props) {
                     required
                     maxLength="150"
                     value={description}
-                    onChange={e => setDescription(e.target.value)}
+                    onChange={(e) => setDescription(e.target.value)}
                   ></textarea>
                   <br />
                 </div>

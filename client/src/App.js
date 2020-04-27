@@ -64,6 +64,7 @@ function App() {
         if (res.data.logged) {
           localStorage.setItem("isLogged", true);
           localStorage.setItem("user", res.data.user);
+          localStorage.setItem("token", res.data.token);
           setShowLogin(false);
           setIsLogged(localStorage.getItem("isLogged"));
           setUser(localStorage.getItem("user"));

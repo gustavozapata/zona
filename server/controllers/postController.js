@@ -69,6 +69,7 @@ exports.likePost = catchAsync(async (req, res, next) => {
     data: likes,
   });
 });
+
 //post comment
 exports.postComment = catchAsync(async (req, res, next) => {
   await Post.updateOne(

@@ -5,7 +5,6 @@ let host =
   process.env.NODE_ENV === "development"
     ? "http://localhost:4000"
     : "https://zona-server.herokuapp.com";
-console.log("host: ", host);
 
 export class Content extends Component {
   constructor(props) {
@@ -34,10 +33,14 @@ export class Content extends Component {
     });
     axios
       // .get("https://zona-server.herokuapp.com/api/v1/posts")
-      .get(`${host}/api/v1/posts`)
+      .get(`${host}/api/v1/posts`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
       .then((res) => {
         this.setState({
-          data: res.data.data.posts.reverse(),
+          data: res.data.data.data.reverse(),
           isLoading: false,
         });
       })
