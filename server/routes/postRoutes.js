@@ -1,5 +1,5 @@
 const express = require("express");
-const userController = require("../controllers/postController");
+const postController = require("../controllers/postController");
 const authController = require("../controllers/authController");
 const commentRouter = require("./commentRoutes");
 const router = express.Router();
@@ -9,25 +9,29 @@ const router = express.Router();
 // router.route("/:postId/comments").post(authController.protect, commentController.createComment);
 router.use("/:postId/comments", commentRouter); //instead of the above we redirect to the commentRouter
 
-//will execute whenever a param 'id' is in the request
-router.param("id", userController.checkId);
-router.route("/stats").get(userController.stats);
-router.route("/test").get(userController.testEndPoint);
+router
+  .route("/")
+  .get(authController.protect, postController.getAllPosts)
+  .post(authController.protect, postController.createPost);
 
-router.route("/").get(userController.getPosts).post(userController.addPost);
-
-router.route("/likes/:id").patch(userController.likePost);
-router.route("/comments/:id").patch(userController.postComment);
+router.route("/likes/:id").patch(postController.likePost);
+router.route("/comments/:id").patch(postController.postComment);
 
 router
   .route("/:id")
   // .post(controller.checkBody)
   //TODO: AUTHORIZATION VERSION
-  .get(authController.protect, userController.getPost)
+  .get(authController.protect, postController.getPost)
+  .patch(authController.protect, postController.updatePost)
   .delete(
     authController.protect,
     authController.restrictTo("admin"),
-    userController.deletePost
+    postController.deletePost
   );
+
+//will execute whenever a param 'id' is in the request
+router.param("id", postController.checkId);
+router.route("/stats").get(postController.stats);
+router.route("/test").get(postController.testEndPoint);
 
 module.exports = router;

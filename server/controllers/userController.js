@@ -1,6 +1,7 @@
 const AppError = require("../utils/appError");
 const catchAsync = require("../utils/catchAsync");
 const APIFeatures = require("../utils/apiFeatures");
+const factory = require("./handlerFactory");
 const dotenv = require("dotenv");
 const User = require("../models/userModel");
 
@@ -21,7 +22,6 @@ exports.usersAlias = (req, res, next) => {
   next();
 };
 
-//ZONA
 exports.invitationCode = catchAsync(async (req, res, next) => {
   if (req.body.code === process.env.INVITATION_CODE) {
     res.status(200).json({
@@ -31,19 +31,14 @@ exports.invitationCode = catchAsync(async (req, res, next) => {
   }
 });
 
-//FIXME: (GET ALL USERS?)
-exports.getAllUsers = catchAsync(async (req, res, next) => {
-  const features = new APIFeatures(User.find(), req.query).limitFields();
-  // features.query.select(["-_id", "-email"]);
-  const users = await features.query;
+//ADMIN LEVEL
+exports.getUser = factory.getOne(User);
+exports.getAllUsers = factory.getAll(User);
+exports.updateUser = factory.updateOne(User); //not for update password (go to authController for that)
+exports.deleteUser = factory.deleteOne(User);
+//ADMIN LEVEL
 
-  res.status(200).json({
-    status: "success",
-    results: users.length,
-    data: { users },
-  });
-});
-
+// USER LEVEL
 exports.updateMe = catchAsync(async (req, res, next) => {
   //1. create error if user POST password data
   if (req.body.password || req.body.confirmPassword) {
@@ -80,53 +75,9 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
     data: null,
   });
 });
+// USER LEVEL
 
-exports.getUser = catchAsync(async (req, res, next) => {
-  const user = await User.findById(req.params.id);
-  if (!user) {
-    return next(new AppError("No user found with that ID", 404));
-  }
-  res.status(200).json({
-    status: "success",
-    data: { user },
-  });
-});
-
-exports.updateUser = catchAsync(async (req, res, next) => {
-  const user = await User.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true,
-  });
-  if (!user) {
-    return next(new AppError("No user found with that ID", 404));
-  }
-  res.status(200).json({
-    status: "success",
-    data: { user },
-  });
-});
-
-exports.deleteUser = catchAsync(async (req, res, next) => {
-  const user = await User.findByIdAndDelete(req.params.id);
-  if (!user) {
-    return next(new AppError("No user found with that ID", 404));
-  }
-  res.status(204).json({
-    status: "success",
-    data: null,
-  });
-});
-//ZONA
-
-// exports.createUser = catchAsync(async (req, res, next) => {
-//   const newUser = await User.create(req.body);
-//   res.status(201).json({
-//     status: "success",
-//     data: {
-//       user: newUser,
-//     },
-//   });
-// });
+//FIXME: (OLD CODE) LOGIN
 // exports.checkLogin = async (req, res) => {
 //   const { email, password } = req.body;
 //   const user = await User.find({ email, password });

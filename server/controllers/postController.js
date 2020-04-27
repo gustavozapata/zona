@@ -1,6 +1,6 @@
 const Post = require("../models/postModel");
-const APIFeatures = require("../utils/apiFeatures");
 const catchAsync = require("../utils/catchAsync");
+const factory = require("./handlerFactory");
 const dotenv = require("dotenv");
 const gzUI = require("gz-ui-react");
 const multer = require("multer");
@@ -52,51 +52,17 @@ exports.checkBody = (req, res, next) => {
   next();
 };
 
-//get all posts
-exports.getPosts = catchAsync(async (req, res, next) => {
-  const features = new APIFeatures(Post.find(), req.query)
-    .filter() //posts?filter=description,by
-    .sort() //posts?sort=date
-    .limitFields() //posts?limit=4 (shows only 4 results)
-    .paginate(); //posts?page=1&limit=3 (3 results per page)
-  const posts = await features.query;
-
-  res.status(200).json({
-    status: "success",
-    results: posts.length,
-    data: { posts },
-  });
-});
-
 //get one post
-exports.getPost = catchAsync(async (req, res, next) => {
-  const post = await Post.findById(req.params.id).populate("comments_ref");
-  if (!post) return next(new AppError("No post found with that ID", 404));
-
-  res.status(200).json({
-    status: "success",
-    data: {
-      post,
-    },
-  });
-});
-
-//add post
-exports.addPost = catchAsync(async (req, res, next) => {
-  console.log("addPost");
-  const newPost = await Post.create(req.body);
-  res.status(200).json({
-    status: "success",
-    data: { post: newPost },
-  });
-  console.log("post added: ", newPost);
-});
+exports.createPost = factory.createOne(Post);
+exports.getPost = factory.getOne(Post, { path: "comments_ref" });
+exports.getAllPosts = factory.getAll(Post);
+exports.updatePost = factory.updateOne(Post);
+exports.deletePost = factory.deleteOne(Post);
 
 //like post
 exports.likePost = catchAsync(async (req, res, next) => {
   let likes = req.body.likes + 1;
   const reaction = req.body.reaction === "love" ? "love" : "funny";
-  console.log("reaction: ", reaction, likes);
   await Post.updateOne({ _id: req.params.id }, { [reaction]: likes });
   res.status(200).json({
     status: "success",
@@ -114,15 +80,6 @@ exports.postComment = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: "success",
     data: "ok",
-  });
-});
-
-//delete a post
-exports.deletePost = catchAsync(async (req, res, next) => {
-  await Post.findByIdAndDelete(req.params.id);
-  res.status(204).json({
-    status: "success",
-    data: null,
   });
 });
 

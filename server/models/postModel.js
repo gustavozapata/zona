@@ -45,7 +45,7 @@ const postSchema = new Schema(
     },
     date: {
       type: String,
-      default: Date.now(),
+      default: Date.now,
     },
     love: {
       type: Number,
@@ -64,7 +64,7 @@ const postSchema = new Schema(
 );
 
 postSchema.virtual("myVirtual").get(function () {
-  return this.likes * 5;
+  return this.love * 5;
 });
 
 // Virtual Populate

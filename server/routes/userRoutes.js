@@ -1,9 +1,9 @@
 const express = require("express");
-const controller = require("../controllers/userController");
+const userController = require("../controllers/userController");
 const authController = require("../controllers/authController");
 const router = express.Router();
 
-//TODO: AUTHENTICATION VERSION
+//AUTHENTICATION
 router.post("/signup", authController.signup);
 router.post("/login", authController.login);
 
@@ -15,29 +15,32 @@ router.patch(
   authController.protect,
   authController.updatePassword
 ); //receives the token and the 'new password'
+//AUTHENTICATION
 
-router.patch("/updateMe", authController.protect, controller.updateMe);
-router.delete("/deleteMe", authController.protect, controller.deleteMe);
+router.patch("/updateMe", authController.protect, userController.updateMe);
+router.delete("/deleteMe", authController.protect, userController.deleteMe);
 
 router
   .route("/")
   .get(
     authController.protect,
     authController.restrictTo("admin", "developer"),
-    controller.getAllUsers
+    userController.getAllUsers
   );
 
-router.route("/top-5-users").get(controller.usersAlias, controller.getAllUsers);
-router.route("/invitation").post(controller.invitationCode);
+router
+  .route("/top-5-users")
+  .get(userController.usersAlias, userController.getAllUsers);
+router.route("/invitation").post(userController.invitationCode);
 
 router
   .route("/:id")
-  .get(controller.getUser)
-  .patch(controller.updateUser)
+  .get(authController.protect, userController.getUser)
+  .patch(authController.protect, userController.updateUser)
   .delete(
     authController.protect,
     authController.restrictTo("admin"),
-    controller.deleteUser
+    userController.deleteUser
   );
 
 module.exports = router;

@@ -6,6 +6,16 @@ const router = express.Router({ mergeParams: true }); //this allows us to use th
 router
   .route("/")
   .get(commentController.getAllComments)
-  .post(authController.protect, commentController.createComment);
+  .post(
+    authController.protect,
+    commentController.setPostUserIds,
+    commentController.createComment
+  );
+
+router
+  .route("/:id")
+  .get(authController.protect, commentController.getComment)
+  .patch(authController.protect, commentController.updateComment)
+  .delete(authController.protect, commentController.deleteComment);
 
 module.exports = router;
