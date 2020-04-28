@@ -69,10 +69,15 @@ export class Content extends Component {
 
   likePost(id, likes, reaction) {
     axios
-      .patch(`https://zona-server.herokuapp.com/api/v1/posts/likes/${id}`, {
-        reaction,
-        likes,
-      })
+      .patch(
+        `${host}/api/v1/posts/${id}/like`,
+        { reaction },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      )
       .then((res) => {
         if (reaction === "love") {
           //TODO: MAKE THIS BETTER FOR SMOOTH UPDATE
@@ -84,10 +89,18 @@ export class Content extends Component {
 
   postComment(id, comment) {
     axios
-      .patch(`https://zona-server.herokuapp.com/api/v1/posts/comments/${id}`, {
-        user: this.props.user,
-        comment,
-      })
+      .patch(
+        `${host}/api/v1/posts/${id}/comment`,
+        {
+          user: this.props.user,
+          comment,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      )
       .then((res) => {
         this.getAll();
       })

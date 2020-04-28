@@ -24,8 +24,8 @@ router
   .patch(postController.updatePost)
   .delete(postController.deletePost);
 
-router.patch("/likes/:id", postController.likePost);
-router.patch("/comments/:id", postController.postComment);
+router.patch("/:id/like", postController.likePost);
+router.patch("/:id/comment", postController.postComment);
 
 //will execute whenever a param 'id' is in the request
 router.param("id", postController.checkId);
