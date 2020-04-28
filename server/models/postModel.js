@@ -15,7 +15,7 @@ const postSchema = new Schema(
     },
 
     //FIXME: (IMPLEMENT)
-    geoLocation: {
+    geolocation: {
       //Mongo calls this 'GeoJSON' data format
       type: {
         type: String,

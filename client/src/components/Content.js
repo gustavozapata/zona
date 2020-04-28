@@ -32,7 +32,6 @@ export class Content extends Component {
       isLoading: true,
     });
     axios
-      // .get("https://zona-server.herokuapp.com/api/v1/posts")
       .get(`${host}/api/v1/posts`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,

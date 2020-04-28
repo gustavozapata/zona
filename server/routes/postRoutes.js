@@ -4,34 +4,30 @@ const authController = require("../controllers/authController");
 const commentRouter = require("./commentRoutes");
 const router = express.Router();
 
-// POST /posts/325ad(postId)/comments
-// GET /posts/3453g(postId)/comments
-// router.route("/:postId/comments").post(authController.protect, commentController.createComment);
+router.get("/stats", postController.stats);
+router.get("/test", postController.testEndPoint);
+
+//AUTHENTICATION (USERS)
+router.use(authController.protect);
+//all routes below will be protected (because of the middleware flow)
+
 router.use("/:postId/comments", commentRouter); //instead of the above we redirect to the commentRouter
 
 router
   .route("/")
-  .get(authController.protect, postController.getAllPosts)
-  .post(authController.protect, postController.createPost);
-
-router.route("/likes/:id").patch(postController.likePost);
-router.route("/comments/:id").patch(postController.postComment);
+  .get(postController.getAllPosts)
+  .post(postController.createPost);
 
 router
   .route("/:id")
-  // .post(controller.checkBody)
-  //TODO: AUTHORIZATION VERSION
-  .get(authController.protect, postController.getPost)
-  .patch(authController.protect, postController.updatePost)
-  .delete(
-    authController.protect,
-    authController.restrictTo("admin"),
-    postController.deletePost
-  );
+  .get(postController.getPost)
+  .patch(postController.updatePost)
+  .delete(postController.deletePost);
+
+router.patch("/likes/:id", postController.likePost);
+router.patch("/comments/:id", postController.postComment);
 
 //will execute whenever a param 'id' is in the request
 router.param("id", postController.checkId);
-router.route("/stats").get(postController.stats);
-router.route("/test").get(postController.testEndPoint);
 
 module.exports = router;

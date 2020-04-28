@@ -3,44 +3,37 @@ const userController = require("../controllers/userController");
 const authController = require("../controllers/authController");
 const router = express.Router();
 
-//AUTHENTICATION
+//PUBLIC (ALL)
 router.post("/signup", authController.signup);
 router.post("/login", authController.login);
+router.post("/invitation", authController.invitationCode);
+router.post("/forgotPassword", authController.forgotPassword); //receives only email address
+router.patch("/resetPassword/:token", authController.resetPassword); //receives token and 'new password'
 
-router.post("/forgotPassword", authController.forgotPassword); //receives only the email address
-router.patch("/resetPassword/:token", authController.resetPassword); //receives the token and the 'new password'
+//AUTHENTICATION (USERS)
+router.use(authController.protect);
+//all routes below will be protected (because of the middleware flow)
 
-router.patch(
-  "/updateMyPassword",
-  authController.protect,
-  authController.updatePassword
-); //receives the token and the 'new password'
-//AUTHENTICATION
+router.get("/me", userController.getMe, userController.getUser);
+router.patch("/updateMe", userController.updateMe);
+router.delete("/deleteMe", userController.deleteMe);
+router.patch("/updateMyPassword", authController.updatePassword);
 
-router.patch("/updateMe", authController.protect, userController.updateMe);
-router.delete("/deleteMe", authController.protect, userController.deleteMe);
+router.get(
+  "/top-5-users",
+  userController.usersAlias,
+  userController.getAllUsers
+);
 
-router
-  .route("/")
-  .get(
-    authController.protect,
-    authController.restrictTo("admin", "developer"),
-    userController.getAllUsers
-  );
+//AUTHORIZATION (ADMIN)
+router.use(authController.restrictTo("admin"));
+//all routes below will be restricted to admin only
 
-router
-  .route("/top-5-users")
-  .get(userController.usersAlias, userController.getAllUsers);
-router.route("/invitation").post(userController.invitationCode);
-
+router.get("/", userController.getAllUsers);
 router
   .route("/:id")
-  .get(authController.protect, userController.getUser)
-  .patch(authController.protect, userController.updateUser)
-  .delete(
-    authController.protect,
-    authController.restrictTo("admin"),
-    userController.deleteUser
-  );
+  .get(userController.getUser)
+  .patch(userController.updateUser)
+  .delete(userController.deleteUser);
 
 module.exports = router;

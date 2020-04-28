@@ -17,19 +17,10 @@ const filterObj = (obj, ...allowedFields) => {
 
 exports.usersAlias = (req, res, next) => {
   req.query.sort = "name";
-  req.query.fields = "email,password";
+  req.query.fields = "name";
   req.query.limit = "5";
   next();
 };
-
-exports.invitationCode = catchAsync(async (req, res, next) => {
-  if (req.body.code === process.env.INVITATION_CODE) {
-    res.status(200).json({
-      status: "success",
-      data: true,
-    });
-  }
-});
 
 //ADMIN LEVEL
 exports.getUser = factory.getOne(User);
@@ -39,6 +30,11 @@ exports.deleteUser = factory.deleteOne(User);
 //ADMIN LEVEL
 
 // USER LEVEL
+exports.getMe = (req, res, next) => {
+  req.params.id = req.user.id;
+  next();
+};
+
 exports.updateMe = catchAsync(async (req, res, next) => {
   //1. create error if user POST password data
   if (req.body.password || req.body.confirmPassword) {

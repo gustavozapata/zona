@@ -134,6 +134,17 @@ exports.restrictTo = (...roles) => {
   };
 };
 
+exports.invitationCode = (req, res, next) => {
+  if (req.body.code !== process.env.INVITATION_CODE) {
+    return next(new AppError("Wrong code", 400));
+  }
+
+  res.status(200).json({
+    status: "success",
+    data: true,
+  });
+};
+
 exports.forgotPassword = catchAsync(async (req, res, next) => {
   //1) get user based on POSTed email
   const user = await User.findOne({ email: req.body.email });
