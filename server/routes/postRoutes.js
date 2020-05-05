@@ -30,4 +30,13 @@ router.patch("/:id/comment", postController.postComment);
 //will execute whenever a param 'id' is in the request
 router.param("id", postController.checkId);
 
+//Geospatial feature - e.g. find posts within 200 miles center, at this lat,lng
+router
+  .route(
+    //pass the coordinates of where we are (latlng = latitude, longitud)
+    "/posts-within/:distance/center/:latlng/unit/:unit"
+  )
+  .get(postController.getPostsWithin);
+router.route("/distances/:latlng/unit/:unit").get(postController.getDistance);
+
 module.exports = router;

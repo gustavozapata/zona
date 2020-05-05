@@ -40,6 +40,7 @@ exports.getAll = (Model) =>
       .limitFields() //posts?limit=4 (shows only 4 results)
       .paginate(); //posts?page=1&limit=3 (3 results per page)
     const docs = await features.query;
+    // const docs = await features.query.explain(); .explain() returns a Mongo doc with some useful data
 
     res.status(200).json({
       status: "success",

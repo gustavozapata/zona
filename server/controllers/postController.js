@@ -1,5 +1,6 @@
 const Post = require("../models/postModel");
 const catchAsync = require("../utils/catchAsync");
+const AppError = require("../utils/appError");
 const factory = require("./handlerFactory");
 const dotenv = require("dotenv");
 const gzUI = require("gz-ui-react");
@@ -67,6 +68,78 @@ exports.stats = catchAsync(async (req, res, next) => {
     status: "success",
     data: stats,
     randomNum,
+  });
+});
+
+//Geospatial feature
+exports.getPostsWithin = catchAsync(async (req, res, next) => {
+  const { distance, latlng, unit } = req.params;
+  const [lat, lng] = latlng.split(","); //url search first lat, then lng
+
+  //if miles ? then pass the radius of the earth in miles (3963.2), if km then 6378.1 km
+  const radius = unit === "mi" ? distance / 3963.2 : distance / 6378.1;
+
+  if (!lat || !lng) {
+    next(
+      new AppError(
+        "Please provide latitude and longitude in the format lat, lng",
+        400
+      )
+    );
+  }
+
+  const posts = await Post.find({
+    geolocation: { $geoWithin: { $centerSphere: [[lng, lat], radius] } }, //here lng is first
+  });
+
+  res.status(200).json({
+    status: "success",
+    results: posts.length,
+    data: {
+      data: posts,
+    },
+  });
+});
+exports.getDistance = catchAsync(async (req, res, next) => {
+  const { latlng, unit } = req.params;
+  const [lat, lng] = latlng.split(","); //url search first lat, then lng
+
+  const multiplier = unit === "mi" ? 0.000621371 : 0.001;
+
+  if (!lat || !lng) {
+    next(
+      new AppError(
+        "Please provide latitude and longitude in the format lat, lng",
+        400
+      )
+    );
+  }
+
+  const distances = await Post.aggregate([
+    {
+      //$geoNear has to be the first one - this is the only stage (aggregate) that exists for geospatial data in mongo
+      $geoNear: {
+        near: {
+          type: "Point",
+          coordinates: [lng * 1, lat * 1], // * 1 to convert to a number
+        }, //this is the point from which we calculate the distance
+        distanceField: "distance",
+        distanceMultiplier: multiplier,
+      },
+    },
+    {
+      $project: {
+        distance: 1,
+        name: 1,
+      },
+    },
+  ]);
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      data: distances,
+    },
   });
 });
 

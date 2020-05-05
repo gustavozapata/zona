@@ -1,5 +1,6 @@
 //THIS FILE IS OUR MODEL THE SCHELETON OF OUR COLLECTION (TABLE) - IT'S LIKE A CLASS IN OOP
 const mongoose = require("mongoose");
+const slugify = require("slugify");
 // const User = require("./userModel");
 const Schema = mongoose.Schema;
 
@@ -32,6 +33,7 @@ const postSchema = new Schema(
       ref: "User",
     },
     commentsEmbedding: Array,
+    slug: String,
     //FIXME: (IMPLEMENT)
 
     image: {
@@ -56,12 +58,30 @@ const postSchema = new Schema(
       default: 0,
     },
     comments: [Object],
+
+    //FIXME: (DEV PURPOSE)
+    ratingsQty: {
+      type: Number,
+      default: 0,
+    },
+    ratingsAvg: {
+      type: Number,
+      min: [1, "rating must be above 1.0"],
+      max: [5, "rating must be below 5.0"],
+      set: (val) => Math.round(val * 10) / 10, // 4.6666 round will give 47. To get 4.7 we use * 10 / 10 trick
+    },
+    //FIXME: (DEV PURPOSE)
   },
   {
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
   }
 );
+
+//INDEXES
+postSchema.index({ by: 1, location: -1 }); //1 = ascending order, -1 descending
+postSchema.index({ slug: 1 });
+postSchema.index({ geolocation: "2dsphere" });
 
 postSchema.virtual("myVirtual").get(function () {
   return this.love * 5;
@@ -88,6 +108,11 @@ postSchema.virtual("comments_ref", {
 // this.byEmbedding = user;
 // next();
 // });
+
+postSchema.pre("save", function (next) {
+  this.slug = slugify(this.description, { lower: true });
+  next();
+});
 
 postSchema.pre(/^find/, function (next) {
   this.queryTime = Date.now();

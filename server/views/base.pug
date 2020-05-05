@@ -1,0 +1,21 @@
+doctype html
+html
+    head
+        title Zona | #{title}
+        meta(charset='UTF-8')
+        meta(rel='viewport' content='width=device-width, initial-scale=1.0')
+        link(rel='stylesheet' href='/css/styles.css')
+        link(rel='shortcut icon' type='image/png' href='/images/favicon.png')
+
+    body
+        //HEADER
+        include _header
+
+        //CONTENT
+        block content
+        //- p To use Zona app, visit
+        //-         | 
+        //-         a(href='https://zona.gustavozapata.me') zona.gustavozapata.me
+
+        //FOOTER
+        include _footer

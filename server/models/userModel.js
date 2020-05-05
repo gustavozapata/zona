@@ -87,7 +87,7 @@ userSchema.pre(/^find/, function (next) {
 });
 
 //this is an instance method (it's available in all documents of a collection i.e. userController.js can access it)
-//this is in contrast to 'static' methods like: User.findOne() that act on the model
+//this is in contrast to 'statics' methods like: User.findOne() that act on the model
 //instance methods act on the document, the instance, the object e.g. {id: 1, name: tavo}
 userSchema.methods.correctPassword = async function (
   candidatePassword,

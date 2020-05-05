@@ -1,3 +1,4 @@
+const path = require("path");
 const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
@@ -14,12 +15,18 @@ const globalErrorHandler = require("./controllers/errorController");
 const postRouter = require("./routes/postRoutes");
 const userRouter = require("./routes/userRoutes");
 const commentRouter = require("./routes/commentRoutes");
+const viewRouter = require("./routes/viewRoutes");
 
 const app = express();
+
+//VIEW ENGINE (PUG)
+app.set("view engine", "pug");
+app.set("views", path.join(__dirname, "views"));
 
 dotenv.config();
 
 //GLOBAL MIDDLEWARE
+app.use(express.static(path.join(__dirname, "public"))); //serves files (html, css, js) in the "public" folder - .static(`${__dirname}/public`) is also used
 app.use(helmet()); //set security HTTP Headers
 // if (app.get("env") === "development") { //USE THIS ONE WHEN NO USING dotenv()
 if (process.env.NODE_ENV === "development") {
@@ -48,9 +55,8 @@ app.use(
   })
 ); //prevent parameter pollution - it clears up the query string
 
-app.use(express.static("public")); //serves files (html, css, js) in the "public" folder - .static(`${__dirname}/public`) is also used
-
 //ROUTES - MOUNTING THE ROUTERS
+app.use("/", viewRouter);
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/posts", postRouter);
 app.use("/api/v1/comments", commentRouter);
