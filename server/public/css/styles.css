@@ -12,3 +12,23 @@ a {
 footer p {
   margin-top: 50px;
 }
+
+/* MAPBOX */
+#map {
+  width: 600px;
+  margin: 40px auto;
+  height: 300px;
+}
+.pin {
+  background-image: url("../images/pin.png");
+  background-size: cover;
+  width: 32px;
+  height: 47px;
+  cursor: pointer;
+}
+
+@media only screen and (max-width: 600px) {
+  #map {
+    width: 99%;
+  }
+}

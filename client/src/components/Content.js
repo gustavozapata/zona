@@ -156,6 +156,13 @@ export class Content extends Component {
               {/* description */}
               <p className="post-description">{post.description}</p>
 
+              {/* geolocation */}
+              {post.geolocation.coordinates && (
+                <div
+                  data-locations={JSON.stringify(post.geolocation.coordinates)}
+                ></div>
+              )}
+
               {/* add comment */}
               <div className="comments">
                 <div className="user-add-comment">
