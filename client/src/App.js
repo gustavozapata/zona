@@ -55,29 +55,28 @@ function App() {
 
   const checkLogin = async (email, password) => {
     setIsLoading(true);
-    await axios
-      .post("https://zona-server.herokuapp.com/api/v1/users/login", {
+    try {
+      await axios.post("https://zona-server.herokuapp.com/api/v1/users/login", {
         email,
         password,
-      })
-      .then((res) => {
-        if (res.data.token) {
-          localStorage.setItem("isLogged", true);
-          localStorage.setItem("user", res.data.data.user.name);
-          // FIXME: (SECURITY) the below is not secure : https://stormpath.com/blog/where-to-store-your-jwts-cookies-vs-html5-web-storage
-          // localStorage.setItem("token", res.data.token);
-          setShowLogin(false);
-          setIsLogged(localStorage.getItem("isLogged"));
-          setUser(localStorage.getItem("user"));
-        }
-      })
-      .catch((error) => {
-        let errorMsg = error.response.data.message
-          ? error.response.data.message
-          : "Wrong email or password";
-        setErrorLogin(errorMsg);
       });
-    setIsLoading(false);
+      if (res.data.token) {
+        localStorage.setItem("isLogged", true);
+        localStorage.setItem("user", res.data.data.user.name);
+        // FIXME: (SECURITY) the below is not secure : https://stormpath.com/blog/where-to-store-your-jwts-cookies-vs-html5-web-storage
+        // localStorage.setItem("token", res.data.token);
+        setShowLogin(false);
+        setIsLogged(localStorage.getItem("isLogged"));
+        setUser(localStorage.getItem("user"));
+      }
+    } catch (error) {
+      let errorMsg = error.response.data.message
+        ? error.response.data.message
+        : "Wrong email or password";
+      setErrorLogin(errorMsg);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const signUp = () => {
