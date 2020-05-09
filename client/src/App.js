@@ -9,6 +9,10 @@ import Footer from "./components/Footer";
 
 import "./App.css";
 
+let host =
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:4000"
+    : "https://zona-server.herokuapp.com";
 let theCode = "";
 
 function App() {
@@ -30,7 +34,7 @@ function App() {
 
   const checkCode = () => {
     axios
-      .post("https://zona-server.herokuapp.com/api/v1/users/invitation", {
+      .post(`${host}/api/v1/users/invitation`, {
         code,
       })
       .then((res) => {
@@ -56,7 +60,7 @@ function App() {
   const checkLogin = async (email, password) => {
     setIsLoading(true);
     await axios
-      .post("https://zona-server.herokuapp.com/api/v1/users/login", {
+      .post(`${host}/api/v1/users/login`, {
         email,
         password,
       })
@@ -100,7 +104,7 @@ function App() {
 
   //USING MY (GZ) NPM PACKAGE
   const gzUI = async () => {
-    await fetch("https://zona-server.herokuapp.com/api/v1/posts/stats")
+    await fetch(`${host}/api/v1/posts/stats`)
       .then((res) => res.json())
       .then((res) => console.log(res));
   };

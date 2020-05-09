@@ -41,7 +41,8 @@ const limiter = rateLimit({
 app.use("/api", limiter); //only apply the limiter to /api path
 
 // app.use(cors()); //allow-access: *
-app.use(cors({ credentials: true, origin: "https://zona.gustavozapata.me" })); //"http://localhost:3000"
+app.use(cors({ credentials: true, origin: "https://zona.gustavozapata.me" }));
+// app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 // app.use(fileUpload()); //to upload files
 
 app.use(express.json()); //allows us to access the body of the request

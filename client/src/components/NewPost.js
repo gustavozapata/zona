@@ -2,6 +2,10 @@ import React, { useState, useRef } from "react";
 import axios from "axios";
 axios.defaults.withCredentials = true;
 
+let host =
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:4000"
+    : "https://zona-server.herokuapp.com";
 let fileName = "";
 
 export default function NewPost(props) {
@@ -44,11 +48,14 @@ export default function NewPost(props) {
       };
       fileName = `post-${Date.now()}.${file[0].type.split("/")[1]}`;
       try {
-        await axios.post("https://zona-server.herokuapp.com/api/v1/posts", {
+        await axios.post(`${host}/api/v1/posts`, {
           description,
           image: fileName,
           by: props.user,
           location,
+          geolocation: {
+            coordinates: [0, 0],
+          },
           date: new Date().toLocaleDateString("en-US", options),
         });
         //if the above success, run the two lines below
