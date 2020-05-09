@@ -64,7 +64,7 @@ function App() {
         if (res.data.token) {
           localStorage.setItem("isLogged", true);
           localStorage.setItem("user", res.data.data.user.name);
-          // FIXME: (SECURITY) the below is not secure : https://stormpath.com/blog/where-to-store-your-jwts-cookies-vs-html5-web-storage
+          // FIXME: (SECURITY) the below is not secure: https://stormpath.com/blog/where-to-store-your-jwts-cookies-vs-html5-web-storage
           // localStorage.setItem("token", res.data.token);
           setShowLogin(false);
           setIsLogged(localStorage.getItem("isLogged"));
