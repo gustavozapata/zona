@@ -72,7 +72,10 @@ function App() {
         }
       })
       .catch((error) => {
-        setErrorLogin(error.response.data.message);
+        let errorMsg = error.response.data.message
+          ? error.response.data.message
+          : "Wrong email or password";
+        setErrorLogin(errorMsg);
       });
     setIsLoading(false);
   };
