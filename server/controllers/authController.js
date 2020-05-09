@@ -22,9 +22,8 @@ const createSendToken = (user, statusCode, res) => {
     httpOnly: true, //true = cookie can't be accessed or modified by the browser
   };
 
-  if (process.env.NODE_ENV === "production") cookieOptions.secure = true; //true = only sent in encrypted connection (HTTPS)
-  //response.cookie('name', data, {options})
-  res.cookie("jwt", token, cookieOptions);
+  // if (process.env.NODE_ENV === "production") cookieOptions.secure = true; //true = only sent in encrypted connection (HTTPS)
+  res.cookie("jwt", token, cookieOptions); //res.cookie('name', data, {options})
 
   //remove password from output
   user.password = undefined;
@@ -66,17 +65,7 @@ exports.login = catchAsync(async (req, res, next) => {
   }
 
   //3) if everything is ok, send token to client
-  const token = signToken(user._id);
-
-  res.status(200).json({
-    status: "success",
-    token,
-    //FIXME: quick fix as I go along on the course
-    logged: true,
-    user: user.name,
-    photo: user.photo,
-  });
-  // createSendToken(user, 200, res) FIXME: add this once above is resolved
+  createSendToken(user, 200, res);
 });
 
 exports.protect = catchAsync(async (req, res, next) => {
@@ -87,6 +76,8 @@ exports.protect = catchAsync(async (req, res, next) => {
     req.headers.authorization.startsWith("Bearer")
   ) {
     token = req.headers.authorization.split(" ")[1];
+  } else if (req.cookies.jwt) {
+    token = req.cookies.jwt;
   }
 
   if (!token) {
@@ -119,6 +110,28 @@ exports.protect = catchAsync(async (req, res, next) => {
 
   //5) finally, if we make it here, next() will grant access to protected route
   req.user = currentUser; //by modifying the req.user we will be able to use it downwards (middleware flow)
+  next();
+});
+
+//FIXME: (TO BE IMPLEMENTED IN VIEW ENGINE (PUG))
+exports.isLoggedIn = catchAsync(async (req, res, next) => {
+  if (req.cookies.jwt) {
+    const decoded = await promisify(jwt.verify)(
+      req.cookies.jwt,
+      process.env.JWT_SECRET
+    );
+
+    const currentUser = await User.findById(decoded.id);
+    if (!currentUser) return next();
+
+    if (currentUser.changedPasswordAfter(decoded.iat)) {
+      return next();
+    }
+
+    //res.locals : all view engine have access to res.locals object
+    res.locals.user = currentUser;
+    next();
+  }
   next();
 });
 

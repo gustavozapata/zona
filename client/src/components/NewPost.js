@@ -43,26 +43,16 @@ export default function NewPost(props) {
       };
       fileName = `post-${Date.now()}.${file[0].type.split("/")[1]}`;
       try {
-        await axios
-          .post(
-            "https://zona-server.herokuapp.com/api/v1/posts",
-            {
-              description,
-              image: fileName,
-              by: props.user,
-              location,
-              date: new Date().toLocaleDateString("en-US", options),
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-              },
-            }
-          )
-          .then(() => {
-            setLoadingBar(50);
-            saveImage(e);
-          });
+        await axios.post("https://zona-server.herokuapp.com/api/v1/posts", {
+          description,
+          image: fileName,
+          by: props.user,
+          location,
+          date: new Date().toLocaleDateString("en-US", options),
+        });
+        //if the above success, run the two lines below
+        setLoadingBar(50);
+        saveImage(e);
       } catch (err) {
         console.log(err);
       }

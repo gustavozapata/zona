@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
+axios.defaults.withCredentials = true;
 
 let host =
   process.env.NODE_ENV === "development"
@@ -27,24 +28,25 @@ export class Content extends Component {
     }
   }
 
-  getAll() {
+  async getAll() {
     this.setState({
       isLoading: true,
     });
-    axios
-      .get(`${host}/api/v1/posts`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      })
+    await axios
+      // .get(`${host}/api/v1/posts`, { headers: {
+      //     Authorization: `Bearer ${localStorage.getItem("token")}`,
+      //   },
+      // })
+      //TODO: THE ABOVE IS REPLACED BY THE BELOW (SINCE USING COOKIES TO STORE JWT)
+      .get(`${host}/api/v1/posts`)
       .then((res) => {
         this.setState({
           data: res.data.data.data.reverse(),
           isLoading: false,
         });
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(() => {
+        this.props.notLoggedIn();
       });
   }
 
@@ -69,15 +71,7 @@ export class Content extends Component {
 
   likePost(id, likes, reaction) {
     axios
-      .patch(
-        `${host}/api/v1/posts/${id}/like`,
-        { reaction },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      )
+      .patch(`${host}/api/v1/posts/${id}/like`, { reaction })
       .then((res) => {
         if (reaction === "love") {
           //TODO: MAKE THIS BETTER FOR SMOOTH UPDATE
@@ -89,22 +83,14 @@ export class Content extends Component {
 
   postComment(id, comment) {
     axios
-      .patch(
-        `${host}/api/v1/posts/${id}/comment`,
-        {
-          user: this.props.user,
-          comment,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      )
+      .patch(`${host}/api/v1/posts/${id}/comment`, {
+        user: this.props.user,
+        comment,
+      })
       .then((res) => {
         this.getAll();
       })
-      .catch((err) => console.log("my error: ", err));
+      .catch((err) => console.log("Zona error: ", err));
   }
 
   render() {

@@ -225,6 +225,10 @@ header h1 {
   cursor: pointer;
   margin-top: 10px;
 }
+.Content .warning {
+  font-size: 1em;
+  margin: 50px 0;
+}
 .post h3 {
   margin-bottom: 8px;
   font-weight: 600;

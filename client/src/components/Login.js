@@ -4,11 +4,11 @@ export default function Login(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleEmailChange = e => {
+  const handleEmailChange = (e) => {
     setEmail(e.target.value);
   };
 
-  const handlePasswordChange = e => {
+  const handlePasswordChange = (e) => {
     setPassword(e.target.value);
   };
 
@@ -37,13 +37,11 @@ export default function Login(props) {
               value={password}
             />
           </div>
-          {props.wrongLogin && (
-            <p className="warning">Wrong email or password</p>
-          )}
+          {props.errorLogin && <p className="warning">{props.errorLogin}</p>}
         </div>
         <button
           className="button btn-loading"
-          onClick={e => {
+          onClick={(e) => {
             e.preventDefault();
             props.login(email, password);
           }}

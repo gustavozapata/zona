@@ -8,6 +8,7 @@ const helmet = require("helmet");
 const mongoSanitize = require("express-mongo-sanitize");
 const xss = require("xss-clean");
 const hpp = require("hpp");
+const cookieParser = require("cookie-parser");
 // const fileUpload = require("express-fileupload");
 
 const AppError = require("./utils/appError");
@@ -39,11 +40,13 @@ const limiter = rateLimit({
 });
 app.use("/api", limiter); //only apply the limiter to /api path
 
-app.use(cors()); //allow-access: *
+// app.use(cors()); //allow-access: *
+app.use(cors({ credentials: true, origin: "https://zona.gustavozapata.me" })); //"http://localhost:3000"
 // app.use(fileUpload()); //to upload files
 
 app.use(express.json()); //allows us to access the body of the request
 // app.use(express.json({limit: '10kb'})); //limit the amount of data that can be sent - it's comment out since images might be larger
+app.use(cookieParser()); //parses the data from cookies coming from the server (allows us to access the cookie of the request)
 
 app.use(mongoSanitize()); //data sanitization against NoSQL query injection
 app.use(xss()); //data sanitization against XSS
@@ -54,6 +57,12 @@ app.use(
     whitelist: ["love", "funny", "description", "location", "by"],
   })
 ); //prevent parameter pollution - it clears up the query string
+
+//testing middleware (for all requests)
+app.use((req, res, next) => {
+  // console.log("req.cookies: ", req.cookies);
+  next();
+});
 
 //ROUTES - MOUNTING THE ROUTERS
 app.use("/", viewRouter);

@@ -14,7 +14,7 @@ let theCode = "";
 function App() {
   const [isLogged, setIsLogged] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
-  const [wrongLogin, setWrongLogin] = useState(false);
+  const [errorLogin, setErrorLogin] = useState("");
   const [showSignup, setShowSignup] = useState(false);
   const [showNewPost, setShowNewPost] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -53,31 +53,28 @@ function App() {
     }
   };
 
-  const checkLogin = (email, password) => {
+  const checkLogin = async (email, password) => {
     setIsLoading(true);
-    axios
+    await axios
       .post("https://zona-server.herokuapp.com/api/v1/users/login", {
         email,
         password,
       })
       .then((res) => {
-        if (res.data.logged) {
+        if (res.data.token) {
           localStorage.setItem("isLogged", true);
-          localStorage.setItem("user", res.data.user);
-          localStorage.setItem("token", res.data.token);
+          localStorage.setItem("user", res.data.data.user.name);
+          // FIXME: (SECURITY) the below is not secure : https://stormpath.com/blog/where-to-store-your-jwts-cookies-vs-html5-web-storage
+          // localStorage.setItem("token", res.data.token);
           setShowLogin(false);
           setIsLogged(localStorage.getItem("isLogged"));
           setUser(localStorage.getItem("user"));
-          setIsLoading(false);
-        } else {
-          setWrongLogin(true);
-          setIsLoading(false);
         }
       })
-      .catch(() => {
-        setWrongLogin(true);
-        setIsLoading(false);
+      .catch((error) => {
+        setErrorLogin(error.response.data.message);
       });
+    setIsLoading(false);
   };
 
   const signUp = () => {
@@ -116,6 +113,7 @@ function App() {
           user={user}
           showNewPost={showNewPost}
           closeNewPost={closeNewPost}
+          notLoggedIn={logout}
         />
       ) : (
         <>
@@ -129,8 +127,8 @@ function App() {
               {showLogin ? (
                 <Login
                   login={checkLogin}
-                  wrongLogin={wrongLogin}
                   isLoading={isLoading}
+                  errorLogin={errorLogin}
                 />
               ) : (
                 <div className="invite-code">
