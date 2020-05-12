@@ -47,6 +47,7 @@ app.use(cors({ credentials: true, origin: "https://zona.gustavozapata.me" }));
 
 app.use(express.json()); //allows us to access the body of the request
 // app.use(express.json({limit: '10kb'})); //limit the amount of data that can be sent - it's comment out since images might be larger
+app.use(express.urlencoded({ extended: true })); //to parse data from html form
 app.use(cookieParser()); //parses the data from cookies coming from the server (allows us to access the cookie of the request)
 
 app.use(mongoSanitize()); //data sanitization against NoSQL query injection
