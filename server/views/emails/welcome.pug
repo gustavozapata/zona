@@ -1,0 +1,17 @@
+extends baseEmail
+
+block content
+  p Hi #{firstName},
+  p Welcome to Zona, we're glad to have you 🎉🙏
+  p We're a Private Social Media where only the loved ones are part of it
+  table.btn.btn-primary(role='presentation', border='0', cellpadding='0', cellspacing='0')
+    tbody
+      tr
+        td(align='left')
+          table(role='presentation', border='0', cellpadding='0', cellspacing='0')
+            tbody
+              tr
+                td
+                  a(href=`${url}`, target='_blank' id='elbtn') Enjoy Zona
+  p If you need any help with anything, please don't hesitate to contact me!
+  p - Gustavo Zapata

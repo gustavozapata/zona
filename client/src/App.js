@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { host } from "./config/general";
 import axios from "axios";
 
 import Header from "./components/Header";
@@ -9,10 +10,6 @@ import Footer from "./components/Footer";
 
 import "./App.css";
 
-let host =
-  process.env.NODE_ENV === "development"
-    ? "http://localhost:4000"
-    : "https://zona-server.herokuapp.com";
 let theCode = "";
 
 function App() {

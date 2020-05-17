@@ -1,29 +1,70 @@
 const nodemailer = require("nodemailer");
+const pug = require("pug");
+const htmlToText = require("html-to-text");
+const dotenv = require("dotenv");
 
-const sendEmail = async (options) => {
-  //1) create a transporter - the service the sends the email (it's not node.js - something like gmail)
-  const transporter = nodemailer.createTransport({
-    //service: "Gmail", - instead of {host, port} we could simply specify a soported service
-    //yahoo, hotmail, sendgrid, mailgun, etc. - these are other services
-    host: process.env.EMAIL_HOST,
-    port: process.env.EMAIL_PORT,
-    auth: {
-      user: process.env.EMAIL_USERNAME,
-      pass: process.env.EMAIL_PASSWORD,
-    },
-  });
+dotenv.config();
 
-  //2) define the email options
-  const mailOptions = {
-    from: "Gustavo Zapata <tavordie@gmail.com>",
-    to: options.email,
-    subject: options.subject,
-    text: options.message,
-    html: `<h2>Reset your password</h2><p>${options.message}</p>`,
-  };
+module.exports = class Email {
+  constructor(user, url) {
+    (this.to = user.email), (this.firstName = user.name);
+    this.url = url;
+    this.from = `Zona <${process.env.EMAIL_FROM}>`;
+  }
 
-  //3) actually send the email
-  await transporter.sendMail(mailOptions);
+  newTransport() {
+    if (process.env.NODE_ENV === "production") {
+      return nodemailer.createTransport({
+        service: "SendGrid", //we don't have to specify host or port since SendGrid is natively supported by nodemailer
+        auth: {
+          user: process.env.SENDGRID_USERNAME,
+          pass: process.env.SENDGRID_PASSWORD,
+        },
+      });
+    }
+    return nodemailer.createTransport({
+      //service: "Gmail", - instead of {host, port} we could simply specify a soported service
+      //yahoo, hotmail, sendgrid, mailgun, etc. - these are other services
+      host: process.env.EMAIL_HOST,
+      port: process.env.EMAIL_PORT,
+      auth: {
+        user: process.env.EMAIL_USERNAME,
+        pass: process.env.EMAIL_PASSWORD,
+      },
+    });
+  }
+
+  //send the actual email
+  async send(template, subject) {
+    //1. render html based on a pug template
+    const html = pug.renderFile(
+      //this takes a file and renders the pug code into real html
+      `${__dirname}/../views/emails/${template}.pug`,
+      {
+        firstName: this.firstName,
+        url: this.url,
+        subject,
+      }
+    );
+
+    //2. define email options
+    const mailOptions = {
+      from: this.from,
+      to: this.to,
+      subject,
+      html,
+      text: htmlToText.fromString(html),
+    };
+
+    //3. create transport and send email
+    await this.newTransport().sendMail(mailOptions);
+  }
+
+  async sendWelcome() {
+    await this.send("welcome", "Welcome to Zona!");
+  }
+
+  async sendPasswordReset() {
+    await this.send("passwordReset", "Reset your password");
+  }
 };
-
-module.exports = sendEmail;

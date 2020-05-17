@@ -18,6 +18,8 @@ const userRouter = require("./routes/userRoutes");
 const commentRouter = require("./routes/commentRoutes");
 const viewRouter = require("./routes/viewRoutes");
 
+let origin = "https://zona.gustavozapata.me";
+
 const app = express();
 
 //VIEW ENGINE (PUG)
@@ -29,9 +31,11 @@ dotenv.config();
 //GLOBAL MIDDLEWARE
 app.use(express.static(path.join(__dirname, "public"))); //serves files (html, css, js) in the "public" folder - .static(`${__dirname}/public`) is also used
 app.use(helmet()); //set security HTTP Headers
+
 // if (app.get("env") === "development") { //USE THIS ONE WHEN NO USING dotenv()
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev")); //logs all the end-point calls
+  origin = "http://localhost:3000";
 }
 const limiter = rateLimit({
   max: 100, //number of requests allowed
@@ -41,8 +45,7 @@ const limiter = rateLimit({
 app.use("/api", limiter); //only apply the limiter to /api path
 
 // app.use(cors()); //allow-access: *
-app.use(cors({ credentials: true, origin: "https://zona.gustavozapata.me" }));
-// app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
+app.use(cors({ credentials: true, origin }));
 // app.use(fileUpload()); //to upload files
 
 app.use(express.json()); //allows us to access the body of the request

@@ -1,11 +1,9 @@
 import React, { useState, useRef } from "react";
+import { host } from "../config/general";
 import axios from "axios";
+
 axios.defaults.withCredentials = true;
 
-let host =
-  process.env.NODE_ENV === "development"
-    ? "http://localhost:4000"
-    : "https://zona-server.herokuapp.com";
 let fileName = "";
 
 export default function NewPost(props) {

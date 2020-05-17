@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { host } from "../config/general";
 import axios from "axios";
 
 export default function SingUp(props) {
@@ -16,7 +17,7 @@ export default function SingUp(props) {
     e.preventDefault();
 
     axios
-      .post("https://zona-server.herokuapp.com/api/v1/users/signup", {
+      .post(`${host}/api/v1/users/signup`, {
         name,
         email,
         password,

@@ -392,6 +392,13 @@ header h1 {
 .btn-loading:hover {
   background-color: white;
 }
+#forgot-password {
+  font-weight: 600;
+  font-size: 0.9em;
+  color: rgb(6, 108, 224);
+  text-decoration: none;
+  cursor: pointer;
+}
 
 /* NEWPOST */
 .NewPost {
