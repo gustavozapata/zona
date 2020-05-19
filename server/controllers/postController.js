@@ -7,6 +7,7 @@ const gzUI = require("gz-ui-react");
 const multer = require("multer");
 
 dotenv.config();
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 exports.createPost = factory.createOne(Post);
 exports.getPost = factory.getOne(Post, { path: "comments_ref" });
@@ -37,6 +38,37 @@ exports.postComment = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: "success",
     data: "ok",
+  });
+});
+
+//buy post
+exports.buyPost = catchAsync(async (req, res, next) => {
+  const post = await Post.findById(req.params.id);
+
+  //1. create checkout session
+  const session = await stripe.checkout.sessions.create({
+    payment_method_types: ["card"],
+    success_url: `https://zona.gustavozapata.me`,
+    cancel_url: `https://zona.gustavozapata.me`,
+    customer_email: req.user.email,
+    client_reference_id: req.params.id,
+    line_items: [
+      {
+        //info about the product
+        name: `${post.description}`,
+        description: `${post.location}`,
+        images: [`https://server.gustavozapata.me/zona/public/${post.image}`],
+        amount: post.price * 100, //convert to cents (pens) since stripe expects cents
+        currency: "usd",
+        quantity: 1,
+      },
+    ],
+  });
+
+  //2. create session as response
+  res.status(200).json({
+    status: "success",
+    session,
   });
 });
 

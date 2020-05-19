@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import { host } from "../config/general";
+import { loadStripe } from "@stripe/stripe-js";
 import axios from "axios";
 
+const stripePromise = loadStripe("pk_test_CogdxAKAHr92wKw0l8oobdtn00caDLPy1Y");
 axios.defaults.withCredentials = true;
 
 export class Content extends Component {
@@ -88,6 +90,21 @@ export class Content extends Component {
       .catch((err) => console.log("Zona error: ", err));
   }
 
+  async buyPost(id) {
+    try {
+      //1. get checkout session from backend
+      const session = await axios(`${host}/api/v1/posts/buy-post/${id}`);
+
+      //2. create a checkout form + charge credit card
+      const stripe = await stripePromise;
+      await stripe.redirectToCheckout({
+        sessionId: session.data.session.id,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   render() {
     return (
       <div className="Content">
@@ -133,6 +150,16 @@ export class Content extends Component {
                 />
                 <span>{post.funny < 1 ? "" : post.funny}</span>
               </div>
+
+              {/* buy post */}
+              {post.price && (
+                <div className="price">
+                  <p>
+                    <span onClick={() => this.buyPost(post._id)}>Buy post</span>{" "}
+                    ${post.price}
+                  </p>
+                </div>
+              )}
 
               {/* description */}
               <p className="post-description">{post.description}</p>

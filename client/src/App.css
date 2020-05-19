@@ -257,6 +257,7 @@ header h1 {
   width: 600px;
 }
 .reactions {
+  float: left;
   margin: 5px 0 0 2px;
   text-align: left;
 }
@@ -272,6 +273,7 @@ header h1 {
 .post-description {
   margin-top: 5px;
   font-weight: 500;
+  clear: both;
 }
 .comments {
   text-align: left;
@@ -332,6 +334,18 @@ header h1 {
   border-radius: 0;
   height: 17px;
   width: 17px;
+}
+.price {
+  float: right;
+}
+.price p {
+  font-weight: 600;
+  font-size: 0.8em;
+}
+.price span {
+  color: rgb(6, 105, 235);
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 /* PROFILE */

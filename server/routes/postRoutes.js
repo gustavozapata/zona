@@ -30,6 +30,8 @@ router.patch("/:id/comment", postController.postComment);
 //will execute whenever a param 'id' is in the request
 router.param("id", postController.checkId);
 
+router.get("/buy-post/:id", authController.protect, postController.buyPost);
+
 //Geospatial feature - e.g. find posts within 200 miles center, at this lat,lng
 router
   .route(

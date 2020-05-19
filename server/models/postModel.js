@@ -58,6 +58,7 @@ const postSchema = new Schema(
       default: 0,
     },
     comments: [Object],
+    price: Number,
 
     //FIXME: (DEV PURPOSE)
     ratingsQty: {
