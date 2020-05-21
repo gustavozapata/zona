@@ -9,6 +9,7 @@ const mongoSanitize = require("express-mongo-sanitize");
 const xss = require("xss-clean");
 const hpp = require("hpp");
 const cookieParser = require("cookie-parser");
+const compression = require("compression");
 // const fileUpload = require("express-fileupload");
 
 const AppError = require("./utils/appError");
@@ -21,6 +22,9 @@ const viewRouter = require("./routes/viewRoutes");
 let origin = "https://zona.gustavozapata.me";
 
 const app = express();
+
+//TODO: (HEROKU)
+app.enable("trust proxy"); //to trust headers sitting behind a proxy (since heroku uses proxies)
 
 //VIEW ENGINE (PUG)
 app.set("view engine", "pug");
@@ -55,6 +59,8 @@ app.use(cookieParser()); //parses the data from cookies coming from the server (
 
 app.use(mongoSanitize()); //data sanitization against NoSQL query injection
 app.use(xss()); //data sanitization against XSS
+
+app.use(compression()); //compresses (reduce size) of text send to client (json also)
 
 app.use(
   hpp({

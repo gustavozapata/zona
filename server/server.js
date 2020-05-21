@@ -36,3 +36,12 @@ process.on("unhandledRejection", (err) => {
     process.exit(1);
   });
 });
+
+//TODO: (HEROKU) - H sends SIGTERM every 24h to ensure the Denos work well and this shuts down the app
+process.on("SIGTERM", () => {
+  console.log("SIGTERM received. Shutting down gracefully");
+  server.close(() => {
+    //this is why we manually close it to ensure all requests are completed
+    console.log("Process terminated");
+  });
+});
