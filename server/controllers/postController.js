@@ -71,6 +71,32 @@ exports.buyPost = catchAsync(async (req, res, next) => {
     session,
   });
 });
+exports.webhookCheckout = (req, res, next) => {
+  const signature = req.headers["stripe-signature"];
+  let event;
+  try {
+    event = stripe.webhooks.constructEvent(
+      req.body,
+      signature,
+      process.env.STRIPE_WEBHOOK_SECRET
+    );
+  } catch (err) {
+    return res.status(400).send(`Webhook error: ${err.message}`);
+  }
+
+  if (event.type === "checkout.session.completed")
+    createCheckout(event.data.object);
+
+  res.status(200).json({ received: true });
+};
+const createCheckout = async (session) => {
+  //TODO: uncomment below if want to store buying info
+  // const post = session.client_reference_id
+  // const user = await User.findOne({email: session.customer_email}).id
+  // const price = session.display_items[0].amount / 100
+  // await Sales.create({post, user, price})
+  console.log("This method will be used when storing the checkout/buying info");
+};
 
 exports.checkId = (req, res, next, val) => {
   console.log(`the id is: ${val}`);

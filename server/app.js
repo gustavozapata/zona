@@ -18,6 +18,7 @@ const postRouter = require("./routes/postRoutes");
 const userRouter = require("./routes/userRoutes");
 const commentRouter = require("./routes/commentRoutes");
 const viewRouter = require("./routes/viewRoutes");
+const postController = require("./controllers/postController");
 
 let origin = "https://zona.gustavozapata.me";
 
@@ -47,9 +48,15 @@ const limiter = rateLimit({
   message: "Too many requests from this IP, please try again in an hour",
 });
 app.use("/api", limiter); //only apply the limiter to /api path
+app.post(
+  "/webhook-checkout",
+  express.raw({ type: "application/json" }),
+  postController.webhookCheckout
+); //we add this here (and not in postController.js) since Stripe needs this in string format and not json (this is why this line goes before app.use(express.json()))
 
 // app.use(cors()); //allow-access: *
 app.use(cors({ credentials: true, origin }));
+app.options("*", cors());
 // app.use(fileUpload()); //to upload files
 
 app.use(express.json()); //allows us to access the body of the request
