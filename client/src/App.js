@@ -7,6 +7,7 @@ import Login from "./components/Login";
 import SignUp from "./components/SingUp";
 import Feed from "./components/Feed";
 import Footer from "./components/Footer";
+// import { InputSearch } from "my-own-components";
 
 import "./App.css";
 
@@ -156,6 +157,8 @@ function App() {
           )}
         </>
       )}
+
+      {/* <InputSearch /> */}
 
       <Footer />
     </div>

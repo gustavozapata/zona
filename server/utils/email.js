@@ -67,4 +67,8 @@ module.exports = class Email {
   async sendPasswordReset() {
     await this.send("passwordReset", "Reset your password");
   }
+
+  async sendNewPostNotification() {
+    await this.send("newPost", "New Post!");
+  }
 };

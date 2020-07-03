@@ -26,6 +26,7 @@ router
 
 router.patch("/:id/like", postController.likePost);
 router.patch("/:id/comment", postController.postComment);
+router.post("/notify", postController.notifyNewPost);
 
 //will execute whenever a param 'id' is in the request
 router.param("id", postController.checkId);

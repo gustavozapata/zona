@@ -81,6 +81,7 @@ export default function NewPost(props) {
           props.closeNewPost();
           setTimeout(() => {
             props.addPost();
+            axios.post(`${host}/api/v1/posts/notify`, { by: props.user });
           }, 1000);
         });
     } catch (err) {

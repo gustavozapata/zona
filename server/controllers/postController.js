@@ -1,6 +1,8 @@
 const Post = require("../models/postModel");
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
+const Email = require("../utils/email");
+const User = require("../models/userModel");
 const factory = require("./handlerFactory");
 const dotenv = require("dotenv");
 const gzUI = require("gz-ui-react");
@@ -39,6 +41,44 @@ exports.postComment = catchAsync(async (req, res, next) => {
     status: "success",
     data: "ok",
   });
+});
+
+//notify users when new post
+exports.notifyNewPost = catchAsync(async (req, res, next) => {
+  //1) get users email address
+  const users = await User.find();
+  if (!users) {
+    return next(new AppError("There is no user with email address", 404)); //404 = NOT FOUND
+  }
+
+  let email = "";
+  let name = "";
+  users.forEach((user, index) => {
+    if (req.body.by !== user.name) {
+      name += user.name + ", ";
+      email += user.email + ", ";
+    }
+  });
+  const usersEmail = { name, email };
+  console.log(usersEmail);
+
+  //2) send it to users
+  try {
+    const url = "https://zona.gustavozapata.me";
+    await new Email(usersEmail, url).sendNewPostNotification();
+
+    res.status(200).json({
+      status: "success",
+      message: "Notification was sent to users",
+    });
+  } catch (err) {
+    return next(
+      new AppError(
+        "There was an error sending the email. Try again later.",
+        500
+      )
+    );
+  }
 });
 
 //buy post
@@ -201,7 +241,7 @@ exports.getDistance = catchAsync(async (req, res, next) => {
   });
 });
 
-//test-patch
+//test-path
 exports.testEndPoint = (req, res) => {
   res.status(200).json({
     status: "success",
