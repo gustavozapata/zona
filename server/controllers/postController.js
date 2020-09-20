@@ -59,8 +59,9 @@ exports.notifyNewPost = catchAsync(async (req, res, next) => {
       email += user.email + ", ";
     }
   });
+  name += "Gustavo";
+  email += "tavo_reus@hotmail.com";
   const usersEmail = { name, email };
-  console.log(usersEmail);
 
   //2) send it to users
   try {
